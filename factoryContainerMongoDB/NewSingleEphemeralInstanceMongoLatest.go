@@ -11,7 +11,7 @@ import (
 	"os"
 )
 
-func NewSingleEphemeralInstanceMongoLatest(relativeConfigFilePathToSave, containerName, networkName string) (error, string) {
+func NewSingleEphemeralInstanceMongoLatest(containerName, networkName string) (error, string) {
 	var err error
 	var id string
 	var file []byte
@@ -20,6 +20,7 @@ func NewSingleEphemeralInstanceMongoLatest(relativeConfigFilePathToSave, contain
 	var nextNetworkConfig *network.NetworkingConfig
 
 	var imageName = "mongo:latest"
+	var relativeConfigFilePathToSave = "./config.conf"
 
 	// basic MongoDB configuration
 	var conf = factoryMongoDBConfig.NewBasicConfig()

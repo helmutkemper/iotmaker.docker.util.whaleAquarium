@@ -17,7 +17,6 @@ func main() {
 	var id string
 
 	err, id = factoryContainerMongoDB.NewSingleEphemeralInstanceMongoLatest(
-		"./config.conf",
 		"MongoDBTete",
 		"mongodb_network",
 	)

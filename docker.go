@@ -30,7 +30,7 @@ type Mount struct {
 	Destination string
 }
 
-type Docker struct {
+type DockerSystem struct {
 	cli       *client.Client
 	ctx       context.Context
 	networkId map[string]string
@@ -39,17 +39,17 @@ type Docker struct {
 }
 
 // Must be first function call
-func (el *Docker) Init() error {
+func (el *DockerSystem) Init() error {
 	el.contextCreate()
 	return el.clientCreate()
 }
 
-func (el *Docker) contextCreate() {
+func (el *DockerSystem) contextCreate() {
 	el.ctx = context.Background()
 }
 
 // Negotiate best docker version
-func (el *Docker) clientCreate() error {
+func (el *DockerSystem) clientCreate() error {
 	var err error
 
 	el.cli, err = client.NewClientWithOpts(client.FromEnv, client.WithAPIVersionNegotiation())
@@ -58,7 +58,7 @@ func (el *Docker) clientCreate() error {
 }
 
 // Mount nat por list by image config
-func (el *Docker) ImageMountNatPortList(imageId string) (error, nat.PortMap) {
+func (el *DockerSystem) ImageMountNatPortList(imageId string) (error, nat.PortMap) {
 	var err error
 	var portList []string
 	var ret nat.PortMap = make(map[nat.Port][]nat.PortBinding)
@@ -80,7 +80,7 @@ func (el *Docker) ImageMountNatPortList(imageId string) (error, nat.PortMap) {
 }
 
 // Get an absolute path from file
-func (el *Docker) FileMakeAbsolutePath(filePath string) (error, string) {
+func (el *DockerSystem) FileMakeAbsolutePath(filePath string) (error, string) {
 	fileAbsolutePath, err := filepath.Abs(filePath)
 	return err, fileAbsolutePath
 }
@@ -103,14 +103,21 @@ func (el *Docker) FileMakeAbsolutePath(filePath string) (error, string) {
 //   mountVolumes: please use a factoryWhaleAquarium.NewVolumeMount()
 //      for a complete list of volumes exposed by image, use
 //      ImageListExposedVolumes(id) and ImageListExposedVolumesByName(name)
-func (el *Docker) ContainerCreate(imageName, containerName string, restart RestartPolicy, mountVolumes []mount.Mount, net *network.NetworkingConfig) error {
+func (el *DockerSystem) ContainerCreate(imageName, containerName string, restart RestartPolicy, mountVolumes []mount.Mount, net *network.NetworkingConfig) (error, string) {
 	var err error
 	var imageId string
 	var portExposedList nat.PortMap
 	var resp container.ContainerCreateCreatedBody
 
 	err, imageId = el.ImageFindIdByName(imageName)
+	if err != nil {
+		return err, ""
+	}
+
 	err, portExposedList = el.ImageMountNatPortList(imageId)
+	if err != nil {
+		return err, ""
+	}
 
 	if len(el.container) == 0 {
 		el.container = make(map[string]container.ContainerCreateCreatedBody)
@@ -134,16 +141,30 @@ func (el *Docker) ContainerCreate(imageName, containerName string, restart Resta
 		containerName,
 	)
 	if err != nil {
-		return err
+		return err, ""
 	}
 
 	el.container[resp.ID] = resp
 
-	return nil
+	return nil, resp.ID
+}
+
+func (el *DockerSystem) ContainerCreateAndStart(imageName, containerName string, restart RestartPolicy, mountVolumes []mount.Mount, net *network.NetworkingConfig) (error, string) {
+	err, id := el.ContainerCreate(imageName, containerName, restart, mountVolumes, net)
+	if err != nil {
+		return err, ""
+	}
+
+	err = el.ContainerStart(id)
+	return err, id
+}
+
+func (el *DockerSystem) ContainerStart(id string) error {
+	return el.cli.ContainerStart(el.ctx, id, types.ContainerStartOptions{})
 }
 
 // list image exposed ports by name
-func (el *Docker) ImageListExposedPortsByName(name string) (error, []string) {
+func (el *DockerSystem) ImageListExposedPortsByName(name string) (error, []string) {
 	var err error
 	var id string
 	err, id = el.ImageFindIdByName(name)
@@ -155,7 +176,7 @@ func (el *Docker) ImageListExposedPortsByName(name string) (error, []string) {
 }
 
 // list image exposed ports by id
-func (el *Docker) ImageListExposedPorts(id string) (error, []string) {
+func (el *DockerSystem) ImageListExposedPorts(id string) (error, []string) {
 	var err error
 	var imageData types.ImageInspect
 	var ret = make([]string, 0)
@@ -172,7 +193,7 @@ func (el *Docker) ImageListExposedPorts(id string) (error, []string) {
 }
 
 // list exposed volumes from image by name
-func (el *Docker) ImageListExposedVolumesByName(name string) (error, []string) {
+func (el *DockerSystem) ImageListExposedVolumesByName(name string) (error, []string) {
 	var err error
 	var id string
 	err, id = el.ImageFindIdByName(name)
@@ -184,7 +205,7 @@ func (el *Docker) ImageListExposedVolumesByName(name string) (error, []string) {
 }
 
 // list exposed volumes from image by id
-func (el *Docker) ImageListExposedVolumes(id string) (error, []string) {
+func (el *DockerSystem) ImageListExposedVolumes(id string) (error, []string) {
 	var err error
 	var imageData types.ImageInspect
 	var ret = make([]string, 0)
@@ -202,7 +223,7 @@ func (el *Docker) ImageListExposedVolumes(id string) (error, []string) {
 
 // verify if exposed volume (folder only) defined by user is exposed
 // in image
-func (el *Docker) ImageVerifyVolume(id, path string) (error, bool) {
+func (el *DockerSystem) ImageVerifyVolume(id, path string) (error, bool) {
 	err, list := el.ImageListExposedVolumes(id)
 	if err != nil {
 		return err, false
@@ -218,7 +239,7 @@ func (el *Docker) ImageVerifyVolume(id, path string) (error, bool) {
 }
 
 // find image id by name
-func (el *Docker) ImageFindIdByName(name string) (error, string) {
+func (el *DockerSystem) ImageFindIdByName(name string) (error, string) {
 	err, list := el.ImageList()
 	if err != nil {
 		return err, ""
@@ -241,13 +262,13 @@ func (el *Docker) ImageFindIdByName(name string) (error, string) {
 }
 
 // list images
-func (el *Docker) ImageList() (error, []types.ImageSummary) {
+func (el *DockerSystem) ImageList() (error, []types.ImageSummary) {
 	ret, err := el.cli.ImageList(el.ctx, types.ImageListOptions{})
 	return err, ret
 }
 
 // wait image pull be completed
-func (el *Docker) ImageWaitPull(name string) error {
+func (el *DockerSystem) ImageWaitPull(name string) error {
 	var wg sync.WaitGroup
 
 	_, found := el.imageId[name]
@@ -256,7 +277,7 @@ func (el *Docker) ImageWaitPull(name string) error {
 	}
 
 	wg.Add(1)
-	go func(el *Docker, wg *sync.WaitGroup, name string) {
+	go func(el *DockerSystem, wg *sync.WaitGroup, name string) {
 
 		for {
 			err, id := el.ImageFindIdByName(name)
@@ -278,10 +299,10 @@ func (el *Docker) ImageWaitPull(name string) error {
 }
 
 // image pull
-func (el *Docker) ImagePull(name string, attachStdOut bool) error {
+func (el *DockerSystem) ImagePull(name string, attachStdOut bool) error {
 	reader, err := el.cli.ImagePull(el.ctx, name, types.ImagePullOptions{})
 	if err != nil {
-		panic(err)
+		return err
 	}
 
 	if len(el.imageId) == 0 {
@@ -298,7 +319,7 @@ func (el *Docker) ImagePull(name string, attachStdOut bool) error {
 }
 
 // verify if network name exists
-func (el *Docker) NetworkVerifyName(name string) (error, bool) {
+func (el *DockerSystem) NetworkVerifyName(name string) (error, bool) {
 	resp, err := el.cli.NetworkList(el.ctx, types.NetworkListOptions{})
 	if err != nil {
 		return err, false
@@ -314,7 +335,7 @@ func (el *Docker) NetworkVerifyName(name string) (error, bool) {
 }
 
 // remove network by name
-func (el *Docker) NetworkRemove(name string) error {
+func (el *DockerSystem) NetworkRemove(name string) error {
 	_, found := el.networkId[name]
 	if found != false {
 		return errors.New("network name not found in network created list")
@@ -324,7 +345,7 @@ func (el *Docker) NetworkRemove(name string) error {
 }
 
 // create network
-func (el *Docker) NetworkCreate(name string) error {
+func (el *DockerSystem) NetworkCreate(name string) error {
 	resp, err := el.cli.NetworkCreate(el.ctx, name, types.NetworkCreate{
 		Labels: map[string]string{
 			"name": name,

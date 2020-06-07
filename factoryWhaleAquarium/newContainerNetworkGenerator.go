@@ -8,7 +8,9 @@ import (
 func NewContainerNetworkGenerator(name string, a, b, c, d byte) (error, util.NetworkGenerator) {
 	var err error
 	var exists bool
-	var net = whaleAquarium.Docker{}
+	var net = whaleAquarium.DockerSystem{}
+	net.Init()
+
 	var ret = util.NetworkGenerator{}
 	ret.Init(name, a, b, c, d)
 

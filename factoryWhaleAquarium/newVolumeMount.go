@@ -30,7 +30,7 @@ func NewVolumeMount(list []whaleAquarium.Mount) (error, []mount.Mount) {
 		ret = append(
 			ret,
 			mount.Mount{
-				Type:   v.MountType.String(),
+				Type:   mount.Type(v.MountType.String()),
 				Source: fileAbsolutePath,
 				Target: v.Destination,
 			},

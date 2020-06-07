@@ -26,5 +26,26 @@ func main() {
 
 	_ = id
 }
+```
 
+```golang
+package main
+
+import "github.com/helmutkemper/iotmaker.docker.util.whaleAquarium/factoryContainerMongoDB"
+
+func main() {
+	var err error
+	var id string
+
+	err, id = factoryContainerMongoDB.NewSingleEphemeralInstanceMongo(
+		"MongoDBTete",
+		"mongodb_network",
+		factoryContainerMongoDB.KMongoDBVersionTag_3_3_15,
+	)
+	if err != nil {
+		panic(err)
+	}
+
+	_ = id
+}
 ```

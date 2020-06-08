@@ -1,7 +1,7 @@
 package factoryWhaleAquarium
 
 import (
-	whaleAquarium "github.com/helmutkemper/iotmaker.docker.util.whaleAquarium"
+	whaleAquarium "github.com/helmutkemper/iotmaker.docker"
 )
 
 func NewRestartPolicyOnFailureRestart() whaleAquarium.RestartPolicy {

@@ -2,7 +2,7 @@ package factoryContainerMongoDB
 
 import (
 	"github.com/docker/go-connections/nat"
-	"github.com/helmutkemper/iotmaker.docker.util.whaleAquarium/util"
+	"github.com/helmutkemper/iotmaker.docker/util"
 )
 
 func NewSingleEphemeralInstanceMongoLatestWithPort(containerName string, networkUtil util.NetworkGenerator, port nat.Port) (error, string) {

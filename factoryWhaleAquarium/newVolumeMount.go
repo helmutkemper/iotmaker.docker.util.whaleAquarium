@@ -3,8 +3,8 @@ package factoryWhaleAquarium
 import (
 	"errors"
 	"github.com/docker/docker/api/types/mount"
-	whaleAquarium "github.com/helmutkemper/iotmaker.docker.util.whaleAquarium"
-	"github.com/helmutkemper/iotmaker.docker.util.whaleAquarium/util"
+	whaleAquarium "github.com/helmutkemper/iotmaker.docker"
+	"github.com/helmutkemper/iotmaker.docker/util"
 )
 
 // en: Return a mount point after verify and correct source file/dir relative

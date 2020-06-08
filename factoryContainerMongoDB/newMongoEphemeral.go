@@ -5,9 +5,9 @@ import (
 	"github.com/docker/docker/api/types/network"
 	"github.com/docker/go-connections/nat"
 	"github.com/helmutkemper/iotmaker.db.mongodb.config/factoryMongoDBConfig"
-	whaleAquarium "github.com/helmutkemper/iotmaker.docker.util.whaleAquarium"
+	whaleAquarium "github.com/helmutkemper/iotmaker.docker"
 	"github.com/helmutkemper/iotmaker.docker.util.whaleAquarium/factoryWhaleAquarium"
-	"github.com/helmutkemper/iotmaker.docker.util.whaleAquarium/util"
+	"github.com/helmutkemper/iotmaker.docker/util"
 	"io/ioutil"
 	"os"
 )

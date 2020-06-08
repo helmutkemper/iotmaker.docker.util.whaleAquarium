@@ -1,8 +1,8 @@
 package factoryWhaleAquarium
 
 import (
-	whaleAquarium "github.com/helmutkemper/iotmaker.docker.util.whaleAquarium"
-	"github.com/helmutkemper/iotmaker.docker.util.whaleAquarium/util"
+	whaleAquarium "github.com/helmutkemper/iotmaker.docker"
+	"github.com/helmutkemper/iotmaker.docker/util"
 )
 
 func NewContainerNetworkGenerator(name string, a, b, c, d byte) (error, util.NetworkGenerator) {

@@ -12,11 +12,10 @@ import (
 	"os"
 )
 
-func newMongoEphemeral(containerName, networkName, imageName string, newPort nat.Port) (error, string) {
+func newMongoEphemeral(containerName, imageName string, networkUtil util.NetworkGenerator, newPort nat.Port) (error, string) {
 	var err error
 	var id string
 	var file []byte
-	var networkUtil util.NetworkGenerator
 	var mountList []mount.Mount
 	var nextNetworkConfig *network.NetworkingConfig
 
@@ -42,18 +41,13 @@ func newMongoEphemeral(containerName, networkName, imageName string, newPort nat
 		return err, ""
 	}
 
-	// create a network
-	err, networkUtil = factoryWhaleAquarium.NewContainerNetworkGenerator(networkName, 10, 0, 0, 1)
-	if err != nil {
-		return err, ""
-	}
-
 	// image pull and wait (true)
 	err = dockerSys.ImagePull(imageName, true)
 	if err != nil {
 		return err, ""
 	}
 
+	// define an external MongoDB config file path
 	err, mountList = factoryWhaleAquarium.NewVolumeMount(
 		[]whaleAquarium.Mount{
 			{

@@ -1,10 +1,13 @@
 package factoryContainerMongoDB
 
-import "github.com/docker/go-connections/nat"
+import (
+	"github.com/docker/go-connections/nat"
+	"github.com/helmutkemper/iotmaker.docker.util.whaleAquarium/util"
+)
 
-func NewSingleEphemeralInstanceMongo(containerName, networkName string, version MongoDBVersionTag) (error, string) {
+func NewSingleEphemeralInstanceMongo(containerName string, networkUtil util.NetworkGenerator, version MongoDBVersionTag) (error, string) {
 	var imageName = "mongo:" + version.String()
 
 	port, _ := nat.NewPort("tcp", "27017")
-	return newMongoEphemeral(containerName, networkName, imageName, port)
+	return newMongoEphemeral(containerName, imageName, networkUtil, port)
 }

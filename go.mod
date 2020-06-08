@@ -8,7 +8,7 @@ require (
 	github.com/docker/docker v1.13.1
 	github.com/docker/go-connections v0.4.0
 	github.com/docker/go-units v0.4.0 // indirect
-	github.com/helmutkemper/iotmaker.db.mongodb.config v0.0.0-20200604015900-cf9012d21f00 // indirect
+	github.com/helmutkemper/iotmaker.db.mongodb.config v0.0.0-20200608001843-5d901fee54e6 // indirect
 	github.com/opencontainers/go-digest v1.0.0 // indirect
 	github.com/pkg/errors v0.9.1 // indirect
 	golang.org/x/net v0.0.0-20200602114024-627f9648deb9 // indirect

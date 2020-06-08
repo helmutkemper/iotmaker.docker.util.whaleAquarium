@@ -6,91 +6,54 @@ this package makes it easy to install tools needed for my personal projects
 
 ### MongoDB
 
-How to install MongoDB with ephemeral storage data
+This example install three containers MongoDB with ephemeral storage data
 ```golang
 package main
 
-import "github.com/helmutkemper/iotmaker.docker.util.whaleAquarium/factoryContainerMongoDB"
+import (
+  "github.com/docker/go-connections/nat"
+  "github.com/helmutkemper/iotmaker.docker.util.whaleAquarium/factoryContainerMongoDB"
+)
 
 func main() {
-	var err error
-	var id string
+  var err error
+  var id string
 
-	err, id = factoryContainerMongoDB.NewSingleEphemeralInstanceMongoLatest(
-		"MongoDBTete",
-		"mongodb_network",
-	)
-	if err != nil {
-		panic(err)
-	}
+  portA, _ := nat.NewPort("tcp", "27016")
+  portB, _ := nat.NewPort("tcp", "27017")
+  portC, _ := nat.NewPort("tcp", "27018")
 
-	_ = id
-}
-```
+  //todo: id network, id image
+  err, id = factoryContainerMongoDB.NewSingleEphemeralInstanceMongoWithPort(
+    "MongoDBTete",
+    "mongodb_network",
+    portA,
+    factoryContainerMongoDB.KMongoDBVersionTag_latest,
+  )
+  if err != nil {
+    panic(err)
+  }
 
-```golang
-package main
+  err, id = factoryContainerMongoDB.NewSingleEphemeralInstanceMongoWithPort(
+    "MongoDBTete2",
+    "mongodb_network",
+    portB,
+    factoryContainerMongoDB.KMongoDBVersionTag_latest,
+  )
+  if err != nil {
+    panic(err)
+  }
 
-import "github.com/helmutkemper/iotmaker.docker.util.whaleAquarium/factoryContainerMongoDB"
+  err, id = factoryContainerMongoDB.NewSingleEphemeralInstanceMongoWithPort(
+    "MongoDBTete3",
+    "mongodb_network",
+    portC,
+    factoryContainerMongoDB.KMongoDBVersionTag_latest,
+  )
+  if err != nil {
+    panic(err)
+  }
 
-func main() {
-	var err error
-	var id string
-
-	err, id = factoryContainerMongoDB.NewSingleEphemeralInstanceMongo(
-		"MongoDBTete",
-		"mongodb_network",
-		factoryContainerMongoDB.KMongoDBVersionTag_3_3_15,
-	)
-	if err != nil {
-		panic(err)
-	}
-
-	_ = id
-}
-```
-
-```golang
-package main
-
-import "github.com/helmutkemper/iotmaker.docker.util.whaleAquarium/factoryContainerMongoDB"
-
-func main() {
-	var err error
-	var id string
-
-	err, id = factoryContainerMongoDB.NewSingleEphemeralInstanceMongoLatestWithPort(
-		"MongoDBTete",
-		"mongodb_network",
-        27017
-	)
-	if err != nil {
-		panic(err)
-	}
-
-	_ = id
-}
-```
-
-```golang
-package main
-
-import "github.com/helmutkemper/iotmaker.docker.util.whaleAquarium/factoryContainerMongoDB"
-
-func main() {
-	var err error
-	var id string
-
-	err, id = factoryContainerMongoDB.NewSingleEphemeralInstanceMongoWithPort(
-		"MongoDBTete",
-		"mongodb_network",
-        27017
-		factoryContainerMongoDB.KMongoDBVersionTag_3_3_15,
-	)
-	if err != nil {
-		panic(err)
-	}
-
-	_ = id
+  _ = id
 }
 ```

@@ -3,6 +3,7 @@ package factoryContainerMongoDB
 import (
 	"github.com/docker/docker/api/types/mount"
 	"github.com/docker/docker/api/types/network"
+	"github.com/docker/go-connections/nat"
 	"github.com/helmutkemper/iotmaker.db.mongodb.config/factoryMongoDBConfig"
 	whaleAquarium "github.com/helmutkemper/iotmaker.docker.util.whaleAquarium"
 	"github.com/helmutkemper/iotmaker.docker.util.whaleAquarium/factoryWhaleAquarium"
@@ -11,7 +12,7 @@ import (
 	"os"
 )
 
-func newMongoEphemeral(containerName, networkName, imageName string, port int) (error, string) {
+func newMongoEphemeral(containerName, networkName, imageName string, newPort nat.Port) (error, string) {
 	var err error
 	var id string
 	var file []byte
@@ -22,7 +23,7 @@ func newMongoEphemeral(containerName, networkName, imageName string, port int) (
 	var relativeConfigFilePathToSave = "./config.conf"
 
 	// basic MongoDB configuration
-	var conf = factoryMongoDBConfig.NewBasicConfigWithPortAndEphemeralData(port)
+	var conf = factoryMongoDBConfig.NewBasicConfigWithEphemeralData()
 	err, file = conf.ToYaml(0)
 	if err != nil {
 		return err, ""
@@ -71,12 +72,23 @@ func newMongoEphemeral(containerName, networkName, imageName string, port int) (
 		return err, ""
 	}
 
-	err, id = dockerSys.ContainerCreateAndStart(
+	currentPort, _ := nat.NewPort("tcp", "27017")
+	currentPortList := []nat.Port{
+		currentPort,
+	}
+
+	newPortList := []nat.Port{
+		newPort,
+	}
+
+	err, id = dockerSys.ContainerCreateChangeExposedPortAndStart(
 		imageName,
 		containerName,
 		whaleAquarium.KRestartPolicyUnlessStopped,
 		mountList,
 		nextNetworkConfig,
+		currentPortList,
+		newPortList,
 	)
 
 	return err, id

@@ -11,19 +11,7 @@ import (
 	"os"
 )
 
-func NewSingleEphemeralInstanceMongoLatest(containerName, networkName string) (error, string) {
-	var imageName = "mongo:latest"
-
-	return newMongoEphemeral(containerName, networkName, imageName)
-}
-
-func NewSingleEphemeralInstanceMongo(containerName, networkName string, version MongoDBVersionTag) (error, string) {
-	var imageName = "mongo:" + version.String()
-
-	return newMongoEphemeral(containerName, networkName, imageName)
-}
-
-func newMongoEphemeral(containerName, networkName, imageName string) (error, string) {
+func newMongoEphemeral(containerName, networkName, imageName string, port int) (error, string) {
 	var err error
 	var id string
 	var file []byte
@@ -34,7 +22,7 @@ func newMongoEphemeral(containerName, networkName, imageName string) (error, str
 	var relativeConfigFilePathToSave = "./config.conf"
 
 	// basic MongoDB configuration
-	var conf = factoryMongoDBConfig.NewBasicConfigWithEphemeralData()
+	var conf = factoryMongoDBConfig.NewBasicConfigWithPortAndEphemeralData(port)
 	err, file = conf.ToYaml(0)
 	if err != nil {
 		return err, ""

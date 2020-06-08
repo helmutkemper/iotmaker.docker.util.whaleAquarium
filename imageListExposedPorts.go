@@ -1,6 +1,8 @@
 package iotmaker_docker_util_whaleAquarium
 
-import "github.com/docker/docker/api/types"
+import (
+	"github.com/docker/docker/api/types"
+)
 
 // list image exposed ports by id
 func (el *DockerSystem) ImageListExposedPorts(id string) (error, []string) {

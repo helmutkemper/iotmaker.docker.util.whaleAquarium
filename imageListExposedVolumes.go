@@ -1,6 +1,8 @@
 package iotmaker_docker_util_whaleAquarium
 
-import "github.com/docker/docker/api/types"
+import (
+	"github.com/docker/docker/api/types"
+)
 
 // list exposed volumes from image by id
 func (el *DockerSystem) ImageListExposedVolumes(id string) (error, []string) {

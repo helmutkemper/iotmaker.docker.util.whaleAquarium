@@ -1,6 +1,8 @@
 package iotmaker_docker_util_whaleAquarium
 
-import "github.com/docker/go-connections/nat"
+import (
+	"github.com/docker/go-connections/nat"
+)
 
 // Mount nat por list by image config
 func (el *DockerSystem) ImageMountNatPortList(imageId string) (error, nat.PortMap) {

@@ -1,6 +1,8 @@
 package iotmaker_docker_util_whaleAquarium
 
-import "github.com/docker/docker/api/types"
+import (
+	"github.com/docker/docker/api/types"
+)
 
 // create network
 func (el *DockerSystem) NetworkCreate(name string) error {

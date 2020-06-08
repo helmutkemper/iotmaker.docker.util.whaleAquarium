@@ -1,6 +1,8 @@
 package iotmaker_docker_util_whaleAquarium
 
-import "errors"
+import (
+	"errors"
+)
 
 // remove network by name
 func (el *DockerSystem) NetworkRemove(name string) error {

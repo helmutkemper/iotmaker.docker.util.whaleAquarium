@@ -1,6 +1,8 @@
 package iotmaker_docker_util_whaleAquarium
 
-import "github.com/docker/docker/api/types"
+import (
+	"github.com/docker/docker/api/types"
+)
 
 // verify if network name exists
 func (el *DockerSystem) NetworkVerifyName(name string) (error, bool) {

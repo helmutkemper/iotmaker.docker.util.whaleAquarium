@@ -34,7 +34,7 @@ func newMongoEphemeral(containerName, networkName, imageName string) (error, str
 	var relativeConfigFilePathToSave = "./config.conf"
 
 	// basic MongoDB configuration
-	var conf = factoryMongoDBConfig.NewBasicConfig()
+	var conf = factoryMongoDBConfig.NewBasicConfigWithEphemeralData()
 	err, file = conf.ToYaml(0)
 	if err != nil {
 		return err, ""

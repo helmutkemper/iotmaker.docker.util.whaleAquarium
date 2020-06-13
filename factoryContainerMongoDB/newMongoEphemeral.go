@@ -12,7 +12,7 @@ import (
 	"os"
 )
 
-func newMongoEphemeral(containerName, imageName string, networkUtil util.NetworkGenerator, newPort nat.Port) (error, string) {
+func newMongoEphemeral(containerName, imageName string, networkUtil util.NetworkGenerator, newPort nat.Port, pullStatus chan whaleAquarium.ContainerPullStatusSendToChannel) (error, string) {
 	var err error
 	var id string
 	var file []byte
@@ -42,7 +42,7 @@ func newMongoEphemeral(containerName, imageName string, networkUtil util.Network
 	}
 
 	// image pull and wait (true)
-	err = dockerSys.ImagePull(imageName, true)
+	err, _, _ = dockerSys.ImagePull(imageName, pullStatus)
 	if err != nil {
 		return err, ""
 	}

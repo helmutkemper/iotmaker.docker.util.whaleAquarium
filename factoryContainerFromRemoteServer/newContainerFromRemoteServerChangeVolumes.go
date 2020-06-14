@@ -35,8 +35,7 @@ func NewContainerFromRemoteServerChangeVolumes(
 		return
 	}
 
-	// image pull and wait (true)
-	err = dockerSys.ImageBuildFromRemoteServer(serverPath, imageTags, &buildStatus)
+	err = dockerSys.ImageBuildFromRemoteServer(serverPath, newImageName, imageTags, &buildStatus)
 	if err != nil {
 		return
 	}

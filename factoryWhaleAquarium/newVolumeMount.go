@@ -10,11 +10,9 @@ import (
 // en: Return a mount point after verify and correct source file/dir relative
 //     path.
 //     This function can't verify if file/dir exists inside on the image
-func NewVolumeMount(list []whaleAquarium.Mount) (error, []mount.Mount) {
-	var err error
+func NewVolumeMount(list []whaleAquarium.Mount) (err error, mountList []mount.Mount) {
 	var found bool
 	var fileAbsolutePath string
-	var ret = make([]mount.Mount, 0)
 
 	for _, v := range list {
 		found = util.VerifyFileExists(v.Source)
@@ -24,11 +22,11 @@ func NewVolumeMount(list []whaleAquarium.Mount) (error, []mount.Mount) {
 
 		err, fileAbsolutePath = util.FileGetAbsolutePath(v.Source)
 		if err != nil {
-			return err, nil
+			return
 		}
 
-		ret = append(
-			ret,
+		mountList = append(
+			mountList,
 			mount.Mount{
 				Type:   mount.Type(v.MountType.String()),
 				Source: fileAbsolutePath,
@@ -37,5 +35,5 @@ func NewVolumeMount(list []whaleAquarium.Mount) (error, []mount.Mount) {
 		)
 	}
 
-	return nil, ret
+	return
 }

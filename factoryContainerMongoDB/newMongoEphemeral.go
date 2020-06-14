@@ -12,7 +12,14 @@ import (
 	"os"
 )
 
-func newMongoEphemeral(containerName, imageName string, networkUtil util.NetworkGenerator, newPort nat.Port, pullStatus chan whaleAquarium.ContainerPullStatusSendToChannel) (error, string) {
+func newMongoEphemeral(
+	containerName,
+	imageName string,
+	networkUtil util.NetworkGenerator,
+	newPort nat.Port,
+	pullStatus chan whaleAquarium.ContainerPullStatusSendToChannel,
+) (error, string) {
+
 	var err error
 	var id string
 	var file []byte

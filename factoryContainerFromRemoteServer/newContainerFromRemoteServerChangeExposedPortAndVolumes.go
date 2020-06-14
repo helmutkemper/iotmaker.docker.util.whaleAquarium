@@ -11,7 +11,7 @@ import (
 
 // English: Create a image and create and start a container from project inside into server
 // Warning: work in progress - buildStatus don't work yet
-func NewContainerFromRemoteServer(
+func NewContainerFromRemoteServerChangeExposedPortAndVolumes(
 	newImageName,
 	newContainerName,
 	networkName,

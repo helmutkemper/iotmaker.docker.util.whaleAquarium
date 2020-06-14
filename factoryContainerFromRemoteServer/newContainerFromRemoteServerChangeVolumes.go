@@ -3,7 +3,6 @@ package factoryContainerFromRemoteServer
 import (
 	"github.com/docker/docker/api/types/mount"
 	"github.com/docker/docker/api/types/network"
-	"github.com/docker/go-connections/nat"
 	whaleAquarium "github.com/helmutkemper/iotmaker.docker"
 	"github.com/helmutkemper/iotmaker.docker/factoryDocker"
 	"github.com/helmutkemper/iotmaker.docker/util"
@@ -11,14 +10,12 @@ import (
 
 // English: Create a image and create and start a container from project inside into server
 // Warning: work in progress - buildStatus don't work yet
-func NewContainerFromRemoteServerChangeExposedPortAndVolumes(
+func NewContainerFromRemoteServerChangeVolumes(
 	newImageName,
 	newContainerName,
 	networkName,
 	serverPath string,
 	imageTags []string,
-	currentPortList,
-	newPortList []nat.Port,
 	containersVolumes []mount.Mount,
 	buildStatus chan whaleAquarium.ContainerPullStatusSendToChannel,
 ) (err error, imageId, containerId string) {
@@ -49,14 +46,12 @@ func NewContainerFromRemoteServerChangeExposedPortAndVolumes(
 		return
 	}
 
-	err, containerId = dockerSys.ContainerCreateChangeExposedPortAndStart(
+	err, containerId = dockerSys.ContainerCreateAndStart(
 		newImageName,
 		newContainerName,
 		whaleAquarium.KRestartPolicyUnlessStopped,
 		containersVolumes,
 		nextNetworkConfig,
-		currentPortList,
-		newPortList,
 	)
 
 	return

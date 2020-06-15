@@ -17,7 +17,7 @@ func newMongoEphemeral(
 	imageName string,
 	networkUtil util.NetworkGenerator,
 	newPort nat.Port,
-	pullStatus chan whaleAquarium.ContainerPullStatusSendToChannel,
+	pullStatus *chan whaleAquarium.ContainerPullStatusSendToChannel,
 ) (error, string) {
 
 	var err error

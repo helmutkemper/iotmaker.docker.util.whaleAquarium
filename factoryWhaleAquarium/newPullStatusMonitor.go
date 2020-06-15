@@ -6,7 +6,7 @@ import (
 	"github.com/helmutkemper/iotmaker.docker/factoryDocker"
 )
 
-func NewPullStatusMonitor() (pullStatusChannel chan iotmakerDocker.ContainerPullStatusSendToChannel) {
+func NewPullStatusMonitor() (pullStatusChannel *chan iotmakerDocker.ContainerPullStatusSendToChannel) {
 	pullStatusChannel = factoryDocker.NewImagePullStatusChannel()
 
 	go func(c chan iotmakerDocker.ContainerPullStatusSendToChannel) {
@@ -22,7 +22,7 @@ func NewPullStatusMonitor() (pullStatusChannel chan iotmakerDocker.ContainerPull
 			}
 		}
 
-	}(pullStatusChannel)
+	}(*pullStatusChannel)
 
 	return
 }

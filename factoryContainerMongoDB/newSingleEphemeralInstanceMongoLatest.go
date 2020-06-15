@@ -6,7 +6,7 @@ import (
 	"github.com/helmutkemper/iotmaker.docker/factoryDocker"
 )
 
-func NewSingleEphemeralInstanceMongoLatest(containerName, networkName string, pullStatus chan whaleAquarium.ContainerPullStatusSendToChannel) (error, string) {
+func NewSingleEphemeralInstanceMongoLatest(containerName, networkName string, pullStatus *chan whaleAquarium.ContainerPullStatusSendToChannel) (error, string) {
 	var imageName = "mongo:latest"
 
 	err, netGenerator := factoryDocker.NewContainerNetworkGenerator(networkName, 10, 0, 0, 1)

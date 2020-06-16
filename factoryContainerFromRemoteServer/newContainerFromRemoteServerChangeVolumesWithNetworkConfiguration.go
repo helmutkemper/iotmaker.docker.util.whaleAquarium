@@ -18,7 +18,7 @@ func NewContainerFromRemoteServerChangeVolumesWithNetworkConfiguration(
 	serverPath string,
 	imageTags []string,
 	containersVolumes []mount.Mount,
-	buildStatus chan iotmakerDocker.ContainerPullStatusSendToChannel,
+	buildStatus *chan iotmakerDocker.ContainerPullStatusSendToChannel,
 ) (err error, imageId, containerId, networkId string) {
 
 	var networkAutoConfiguration *iotmakerDocker.NextNetworkAutoConfiguration
@@ -42,7 +42,7 @@ func NewContainerFromRemoteServerChangeVolumesWithNetworkConfiguration(
 		return
 	}
 
-	err = dockerSys.ImageBuildFromRemoteServer(serverPath, newImageName, imageTags, &buildStatus)
+	err = dockerSys.ImageBuildFromRemoteServer(serverPath, newImageName, imageTags, buildStatus)
 	if err != nil {
 		return
 	}

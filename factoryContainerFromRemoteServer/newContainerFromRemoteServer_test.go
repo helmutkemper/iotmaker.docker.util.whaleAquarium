@@ -43,6 +43,10 @@ func ExampleNewContainerFromRemoteServer() {
 	var resp *http.Response
 	var site []byte
 	resp, err = http.Get("http://localhost:3000")
+	if err != nil {
+		panic(err)
+	}
+
 	site, err = ioutil.ReadAll(resp.Body)
 	if err != nil {
 		panic(err)

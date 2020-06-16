@@ -2,6 +2,7 @@ package factoryContainerMongoDB
 
 import (
 	"github.com/docker/docker/api/types/mount"
+	"github.com/docker/docker/api/types/network"
 	"github.com/docker/go-connections/nat"
 	"github.com/helmutkemper/iotmaker.db.mongodb.config/factoryMongoDBConfig"
 	iotmakerDocker "github.com/helmutkemper/iotmaker.docker"
@@ -10,15 +11,23 @@ import (
 	"os"
 )
 
-func newMongoEphemeral(
+func newMongoEphemeralWithNetworkConfiguration(
 	imageName,
 	containerName string,
+	containerRestartPolicy iotmakerDocker.RestartPolicy,
+	networkName string,
+	networkDrive iotmakerDocker.NetworkDrive,
+	networkScope,
+	networkSubnet,
+	networkGateway string,
 	newPort nat.Port,
 	pullStatus *chan iotmakerDocker.ContainerPullStatusSendToChannel,
-) (err error, containerId string) {
+) (err error, containerId, networkId string) {
 
 	var file []byte
 	var mountList []mount.Mount
+	var networkAutoConfiguration *iotmakerDocker.NextNetworkAutoConfiguration
+	var networkConfig *network.NetworkingConfig
 
 	var relativeConfigFilePathToSave = "./config.conf"
 
@@ -38,6 +47,17 @@ func newMongoEphemeral(
 	// init docker
 	var dockerSys = iotmakerDocker.DockerSystem{}
 	err = dockerSys.Init()
+	if err != nil {
+		return
+	}
+
+	err, networkId, networkAutoConfiguration = dockerSys.NetworkCreate(
+		networkName,
+		networkDrive,
+		networkScope,
+		networkSubnet,
+		networkGateway,
+	)
 	if err != nil {
 		return
 	}
@@ -71,12 +91,17 @@ func newMongoEphemeral(
 		newPort,
 	}
 
+	err, networkConfig = networkAutoConfiguration.GetNext()
+	if err != nil {
+		return
+	}
+
 	err, containerId = dockerSys.ContainerCreateChangeExposedPortAndStart(
 		imageName,
 		containerName,
-		iotmakerDocker.KRestartPolicyUnlessStopped,
+		containerRestartPolicy,
 		mountList,
-		nil,
+		networkConfig,
 		currentPortList,
 		newPortList,
 	)

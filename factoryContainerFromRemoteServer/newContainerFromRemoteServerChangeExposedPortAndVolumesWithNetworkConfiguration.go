@@ -2,26 +2,45 @@ package factoryContainerFromRemoteServer
 
 import (
 	"github.com/docker/docker/api/types/mount"
+	"github.com/docker/docker/api/types/network"
 	"github.com/docker/go-connections/nat"
 	iotmakerDocker "github.com/helmutkemper/iotmaker.docker"
 )
 
-// English: Create a image and create and start a container from project inside into server
-// Warning: work in progress - buildStatus don't work yet
-func NewContainerFromRemoteServerChangeExposedPortAndVolumes(
+func NewContainerFromRemoteServerChangeExposedPortAndVolumesWithNetworkConfiguration(
 	newImageName,
-	newContainerName,
+	newContainerName string,
+	newContainerRestartPolicy iotmakerDocker.RestartPolicy,
+	networkName string,
+	networkDrive iotmakerDocker.NetworkDrive,
+	networkScope,
+	networkSubnet,
+	networkGateway string,
 	serverPath string,
 	imageTags []string,
 	currentPortList,
 	newPortList []nat.Port,
 	containersVolumes []mount.Mount,
 	buildStatus chan iotmakerDocker.ContainerPullStatusSendToChannel,
-) (err error, imageId, containerId string) {
+) (err error, imageId, containerId, networkId string) {
+
+	var networkAutoConfiguration *iotmakerDocker.NextNetworkAutoConfiguration
+	var networkConfig *network.NetworkingConfig
 
 	// init docker
 	var dockerSys = iotmakerDocker.DockerSystem{}
 	err = dockerSys.Init()
+	if err != nil {
+		return
+	}
+
+	err, networkId, networkAutoConfiguration = dockerSys.NetworkCreate(
+		networkName,
+		networkDrive,
+		networkScope,
+		networkSubnet,
+		networkGateway,
+	)
 	if err != nil {
 		return
 	}
@@ -32,6 +51,7 @@ func NewContainerFromRemoteServerChangeExposedPortAndVolumes(
 		return
 	}
 
+	err, networkConfig = networkAutoConfiguration.GetNext()
 	if err != nil {
 		return
 	}
@@ -39,9 +59,9 @@ func NewContainerFromRemoteServerChangeExposedPortAndVolumes(
 	err, containerId = dockerSys.ContainerCreateChangeExposedPortAndStart(
 		newImageName,
 		newContainerName,
-		iotmakerDocker.KRestartPolicyUnlessStopped,
+		newContainerRestartPolicy,
 		containersVolumes,
-		nil,
+		networkConfig,
 		currentPortList,
 		newPortList,
 	)

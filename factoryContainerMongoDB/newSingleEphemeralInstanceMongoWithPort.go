@@ -2,14 +2,14 @@ package factoryContainerMongoDB
 
 import (
 	"github.com/docker/go-connections/nat"
-	whaleAquarium "github.com/helmutkemper/iotmaker.docker"
+	iotmakerDocker "github.com/helmutkemper/iotmaker.docker"
 )
 
 func NewSingleEphemeralInstanceMongoWithPort(
 	containerName string,
 	port nat.Port,
 	version MongoDBVersionTag,
-	pullStatus *chan whaleAquarium.ContainerPullStatusSendToChannel,
+	pullStatus *chan iotmakerDocker.ContainerPullStatusSendToChannel,
 ) (err error, containerId string) {
 
 	var imageName = "mongo:" + version.String()

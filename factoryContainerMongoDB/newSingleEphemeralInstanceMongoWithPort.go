@@ -13,7 +13,7 @@ func NewSingleEphemeralInstanceMongoWithPort(
 ) (err error, containerId string) {
 
 	var imageName = "mongo:" + version.String()
-	err, containerId = newMongoEphemeral(containerName, imageName, port, pullStatus)
+	err, containerId = newMongoEphemeral(imageName, containerName, port, pullStatus)
 
 	return
 }

@@ -10,11 +10,10 @@ import (
 func NewContainerFromRemoteServerChangeVolumes(
 	newImageName,
 	newContainerName,
-	networkName,
 	serverPath string,
 	imageTags []string,
 	containersVolumes []mount.Mount,
-	buildStatus chan iotmakerDocker.ContainerPullStatusSendToChannel,
+	buildStatus *chan iotmakerDocker.ContainerPullStatusSendToChannel,
 ) (err error, imageId, containerId string) {
 
 	// init docker
@@ -24,7 +23,7 @@ func NewContainerFromRemoteServerChangeVolumes(
 		return
 	}
 
-	err = dockerSys.ImageBuildFromRemoteServer(serverPath, newImageName, imageTags, &buildStatus)
+	err = dockerSys.ImageBuildFromRemoteServer(serverPath, newImageName, imageTags, buildStatus)
 	if err != nil {
 		return
 	}

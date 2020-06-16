@@ -2,7 +2,9 @@ package factoryContainerFromRemoteServer
 
 import (
 	"fmt"
+	"github.com/docker/docker/api/types/mount"
 	iotmakerDocker "github.com/helmutkemper/iotmaker.docker"
+	"github.com/helmutkemper/iotmaker.docker.util.whaleAquarium/factoryWhaleAquarium"
 	"github.com/helmutkemper/iotmaker.docker/factoryDocker"
 	"io/ioutil"
 	"net/http"
@@ -10,9 +12,10 @@ import (
 
 // Before run this example, you must create a file [windows: C:]/static/index.html and put
 // "It's alive!" inside file, without html tags and line breaks.
-func ExampleNewContainerFromRemoteServer() {
+func ExampleNewContainerFromRemoteServerChangeVolumes() {
 	var err error
 	var pullStatusChannel = factoryDocker.NewImagePullStatusChannel()
+	var volumesList []mount.Mount
 
 	go func(c chan iotmakerDocker.ContainerPullStatusSendToChannel) {
 
@@ -29,11 +32,25 @@ func ExampleNewContainerFromRemoteServer() {
 
 	}(*pullStatusChannel)
 
-	err, _, _ = NewContainerFromRemoteServer(
+	err, volumesList = factoryWhaleAquarium.NewVolumeMount(
+		[]iotmakerDocker.Mount{
+			{
+				MountType:   iotmakerDocker.KVolumeMountTypeBind,
+				Source:      "C:\\static", //absolute or relative to this code
+				Destination: "/static",    //folder inside container
+			},
+		},
+	)
+	if err != nil {
+		panic(err)
+	}
+
+	err, _, _ = NewContainerFromRemoteServerChangeVolumes(
 		"server_delete_before_test:latest",
 		"container_delete_before_test",
 		"https://github.com/helmutkemper/iotmaker.docker.util.whaleAquarium.sample.git",
 		[]string{},
+		volumesList,
 		pullStatusChannel,
 	)
 	if err != nil {

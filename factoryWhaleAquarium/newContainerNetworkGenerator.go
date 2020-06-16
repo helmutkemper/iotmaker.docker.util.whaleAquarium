@@ -5,26 +5,30 @@ import (
 	"github.com/helmutkemper/iotmaker.docker/util"
 )
 
-func NewContainerNetworkGenerator(name string, a, b, c, d byte) (error, util.NetworkGenerator) {
-	var err error
+func NewContainerNetworkGenerator(name string, a, b, c, d byte) (err error, generator util.NetworkGenerator) {
 	var exists bool
+	var networkId string
 	var net = whaleAquarium.DockerSystem{}
 	net.Init()
 
-	var ret = util.NetworkGenerator{}
-	ret.Init(name, a, b, c, d)
-
 	err, exists = net.NetworkVerifyName(name)
 	if err != nil {
-		return err, ret
+		return
 	}
 
 	if exists == false {
-		err = net.NetworkCreate(name)
+		err, networkId = net.NetworkCreate(name)
 		if err != nil {
-			return err, ret
+			return
+		}
+	} else {
+		err, networkId = net.NetworkFindIdByName(name)
+		if err != nil {
+			return
 		}
 	}
 
-	return err, ret
+	generator.Init(networkId, name, a, b, c, d)
+
+	return
 }

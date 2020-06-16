@@ -69,6 +69,7 @@ func newMongoEphemeral(
 	}
 
 	err, nextNetworkConfig = networkUtil.GetNext()
+
 	if err != nil {
 		return err, ""
 	}
@@ -91,6 +92,11 @@ func newMongoEphemeral(
 		currentPortList,
 		newPortList,
 	)
+
+	err, _ = dockerSys.ContainerNetworkInspect(id)
+	if err != nil {
+		return err, id
+	}
 
 	return err, id
 }

@@ -9,7 +9,7 @@ import (
 func NewSingleEphemeralInstanceMongo(containerName, networkName string, version MongoDBVersionTag, pullStatus *chan whaleAquarium.ContainerPullStatusSendToChannel) (error, string) {
 	var imageName = "mongo:" + version.String()
 
-	err, netGenerator := factoryDocker.NewContainerNetworkGenerator(networkName, 10, 0, 0, 1)
+	err, netGenerator, _ := factoryDocker.NewContainerNetworkGenerator(networkName, 10, 0, 0, 1)
 	if err != nil {
 		return err, ""
 	}

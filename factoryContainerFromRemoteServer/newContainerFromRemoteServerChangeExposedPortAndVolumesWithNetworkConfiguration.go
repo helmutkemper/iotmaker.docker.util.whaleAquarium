@@ -21,7 +21,7 @@ func NewContainerFromRemoteServerChangeExposedPortAndVolumesWithNetworkConfigura
 	currentPortList,
 	newPortList []nat.Port,
 	containersVolumes []mount.Mount,
-	buildStatus chan iotmakerDocker.ContainerPullStatusSendToChannel,
+	buildStatus *chan iotmakerDocker.ContainerPullStatusSendToChannel,
 ) (err error, imageId, containerId, networkId string) {
 
 	var networkAutoConfiguration *iotmakerDocker.NextNetworkAutoConfiguration
@@ -46,7 +46,7 @@ func NewContainerFromRemoteServerChangeExposedPortAndVolumesWithNetworkConfigura
 	}
 
 	// image pull and wait (true)
-	err = dockerSys.ImageBuildFromRemoteServer(serverPath, newImageName, imageTags, &buildStatus)
+	err = dockerSys.ImageBuildFromRemoteServer(serverPath, newImageName, imageTags, buildStatus)
 	if err != nil {
 		return
 	}

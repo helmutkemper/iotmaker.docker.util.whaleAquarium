@@ -22,9 +22,12 @@ NewContainerFromRemoteServerWithNetworkConfiguration()
 
 ##### Server example:
 
+```
 server := "https://github.com/__USER__/__PROJECT__.git"
 server := "https://x-access-token:__TOKEN__@github.com/__USER__/__PROJECT__.git"
+```
 
-To get a github token
-settings > Developer settings > Personal access tokens > Generate new token
+##### To get a github token
+**settings** > **Developer settings** > **Personal access tokens** > **Generate new token**
+
 Mark [x]repo - Full control of private repositories

@@ -13,7 +13,7 @@ func NewSingleEphemeralInstanceMongo(
 
 	var imageName = "mongo:" + version.String()
 	port, _ := nat.NewPort("tcp", "27017")
-	err, containerId = newMongoEphemeral(containerName, imageName, port, pullStatus)
+	err, containerId = newMongoEphemeral(imageName, containerName, port, pullStatus)
 
 	return
 }

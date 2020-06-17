@@ -32,10 +32,6 @@ func NewContainerFromRemoteServerChangeExposedPortAndVolumes(
 		return
 	}
 
-	if err != nil {
-		return
-	}
-
 	err, containerId = dockerSys.ContainerCreateChangeExposedPortAndStart(
 		newImageName,
 		newContainerName,

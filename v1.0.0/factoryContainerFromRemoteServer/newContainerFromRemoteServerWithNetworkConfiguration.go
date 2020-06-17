@@ -2,22 +2,25 @@ package factoryContainerFromRemoteServer
 
 import (
 	"github.com/docker/docker/api/types/mount"
+	"github.com/docker/docker/api/types/network"
 	iotmakerDocker "github.com/helmutkemper/iotmaker.docker"
-	"github.com/helmutkemper/iotmaker.docker.util.whaleAquarium/factoryWhaleAquarium"
+	"github.com/helmutkemper/iotmaker.docker/factoryDocker"
 )
 
-// English: Create a image and create and start a container from project inside into server
-func NewContainerFromRemoteServer(
+func NewContainerFromRemoteServerWithNetworkConfiguration(
 	newImageName,
-	newContainerName,
+	newContainerName string,
+	newContainerRestartPolicy iotmakerDocker.RestartPolicy,
+	networkAutoConfiguration *iotmakerDocker.NextNetworkAutoConfiguration,
 	serverPath string,
 	imageTags []string,
 	buildStatus *chan iotmakerDocker.ContainerPullStatusSendToChannel,
-) (err error, imageId, containerId string) {
+) (err error, imageId, containerId, networkId string) {
 
 	var containersVolumes []mount.Mount
 	var imageVolumesList []string
 	var containersVolumeTmpList = make([]iotmakerDocker.Mount, 0)
+	var networkConfig *network.NetworkingConfig
 
 	// init docker
 	var dockerSys = iotmakerDocker.DockerSystem{}
@@ -47,7 +50,12 @@ func NewContainerFromRemoteServer(
 		)
 	}
 
-	err, containersVolumes = factoryWhaleAquarium.NewVolumeMount(containersVolumeTmpList)
+	err, containersVolumes = factoryDocker.NewVolumeMount(containersVolumeTmpList)
+	if err != nil {
+		return
+	}
+
+	err, networkConfig = networkAutoConfiguration.GetNext()
 	if err != nil {
 		return
 	}
@@ -55,9 +63,9 @@ func NewContainerFromRemoteServer(
 	err, containerId = dockerSys.ContainerCreateAndStart(
 		newImageName,
 		newContainerName,
-		iotmakerDocker.KRestartPolicyUnlessStopped,
+		newContainerRestartPolicy,
 		containersVolumes,
-		nil,
+		networkConfig,
 	)
 
 	return

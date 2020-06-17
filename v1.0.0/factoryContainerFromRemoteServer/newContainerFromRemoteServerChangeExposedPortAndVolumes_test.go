@@ -5,7 +5,6 @@ import (
 	"github.com/docker/docker/api/types/mount"
 	"github.com/docker/go-connections/nat"
 	iotmakerDocker "github.com/helmutkemper/iotmaker.docker"
-	"github.com/helmutkemper/iotmaker.docker.util.whaleAquarium/factoryWhaleAquarium"
 	"github.com/helmutkemper/iotmaker.docker/factoryDocker"
 	"io/ioutil"
 	"net/http"
@@ -51,7 +50,7 @@ func ExampleNewContainerFromRemoteServerChangeExposedPortAndVolumes() {
 		newPort,
 	}
 
-	err, volumesList = factoryWhaleAquarium.NewVolumeMount(
+	err, volumesList = factoryDocker.NewVolumeMount(
 		[]iotmakerDocker.Mount{
 			{
 				MountType:   iotmakerDocker.KVolumeMountTypeBind,

@@ -3,14 +3,14 @@ package factoryContainerFromRemoteServer
 import (
 	"fmt"
 	"github.com/docker/docker/api/types/mount"
+	"github.com/docker/go-connections/nat"
 	iotmakerDocker "github.com/helmutkemper/iotmaker.docker"
-	"github.com/helmutkemper/iotmaker.docker.util.whaleAquarium/factoryWhaleAquarium"
 	"github.com/helmutkemper/iotmaker.docker/factoryDocker"
 	"io/ioutil"
 	"net/http"
 )
 
-func ExampleNewContainerFromRemoteServerChangeVolumesWithNetworkConfiguration() {
+func ExampleNewContainerFromRemoteServerChangeExposedPortAndVolumesWithNetworkConfiguration() {
 	var err error
 	var pullStatusChannel = factoryDocker.NewImagePullStatusChannel()
 	var volumesList []mount.Mount
@@ -31,7 +31,25 @@ func ExampleNewContainerFromRemoteServerChangeVolumesWithNetworkConfiguration() 
 
 	}(*pullStatusChannel)
 
-	err, volumesList = factoryWhaleAquarium.NewVolumeMount(
+	currentPort, err := nat.NewPort("tcp", "3000")
+	if err != nil {
+		panic(err)
+	}
+
+	newPort, err := nat.NewPort("tcp", "8080")
+	if err != nil {
+		panic(err)
+	}
+
+	currentPortList := []nat.Port{
+		currentPort,
+	}
+
+	newPortList := []nat.Port{
+		newPort,
+	}
+
+	err, volumesList = factoryDocker.NewVolumeMount(
 		[]iotmakerDocker.Mount{
 			{
 				MountType:   iotmakerDocker.KVolumeMountTypeBind,
@@ -49,13 +67,15 @@ func ExampleNewContainerFromRemoteServerChangeVolumesWithNetworkConfiguration() 
 		panic(err)
 	}
 
-	err, _, _, _ = NewContainerFromRemoteServerChangeVolumesWithNetworkConfiguration(
+	err, _, _, _ = NewContainerFromRemoteServerChangeExposedPortAndVolumesWithNetworkConfiguration(
 		"server_delete_before_test:latest",
 		"container_delete_before_test",
 		iotmakerDocker.KRestartPolicyOnFailure,
 		networkAutoConfiguration,
 		"https://github.com/helmutkemper/iotmaker.docker.util.whaleAquarium.sample.git",
 		[]string{},
+		currentPortList,
+		newPortList,
 		volumesList,
 		pullStatusChannel,
 	)
@@ -65,7 +85,7 @@ func ExampleNewContainerFromRemoteServerChangeVolumesWithNetworkConfiguration() 
 
 	var resp *http.Response
 	var site []byte
-	resp, err = http.Get("http://localhost:3000")
+	resp, err = http.Get("http://localhost:8080")
 	if err != nil {
 		panic(err)
 	}

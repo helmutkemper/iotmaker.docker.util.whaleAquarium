@@ -2,27 +2,23 @@ package factoryContainerMongoDB
 
 import (
 	"github.com/docker/docker/api/types/mount"
-	"github.com/docker/docker/api/types/network"
 	"github.com/docker/go-connections/nat"
 	"github.com/helmutkemper/iotmaker.db.mongodb.config/factoryMongoDBConfig"
 	iotmakerDocker "github.com/helmutkemper/iotmaker.docker"
-	"github.com/helmutkemper/iotmaker.docker.util.whaleAquarium/factoryWhaleAquarium"
+	"github.com/helmutkemper/iotmaker.docker/factoryDocker"
 	"io/ioutil"
 	"os"
 )
 
-func newMongoEphemeralWithNetworkConfiguration(
+func newMongoEphemeral(
 	imageName,
 	containerName string,
-	containerRestartPolicy iotmakerDocker.RestartPolicy,
-	networkAutoConfiguration *iotmakerDocker.NextNetworkAutoConfiguration,
 	newPort nat.Port,
 	pullStatus *chan iotmakerDocker.ContainerPullStatusSendToChannel,
-) (err error, containerId, networkId string) {
+) (err error, containerId string) {
 
 	var file []byte
 	var mountList []mount.Mount
-	var networkConfig *network.NetworkingConfig
 
 	var relativeConfigFilePathToSave = "./config.conf"
 
@@ -46,14 +42,14 @@ func newMongoEphemeralWithNetworkConfiguration(
 		return
 	}
 
-	// image pull and wait
+	// image pull and wait (true)
 	err, _, _ = dockerSys.ImagePull(imageName, pullStatus)
 	if err != nil {
 		return
 	}
 
 	// define an external MongoDB config file path
-	err, mountList = factoryWhaleAquarium.NewVolumeMount(
+	err, mountList = factoryDocker.NewVolumeMount(
 		[]iotmakerDocker.Mount{
 			{
 				MountType:   iotmakerDocker.KVolumeMountTypeBind,
@@ -75,17 +71,12 @@ func newMongoEphemeralWithNetworkConfiguration(
 		newPort,
 	}
 
-	err, networkConfig = networkAutoConfiguration.GetNext()
-	if err != nil {
-		return
-	}
-
 	err, containerId = dockerSys.ContainerCreateChangeExposedPortAndStart(
 		imageName,
 		containerName,
-		containerRestartPolicy,
+		iotmakerDocker.KRestartPolicyUnlessStopped,
 		mountList,
-		networkConfig,
+		nil,
 		currentPortList,
 		newPortList,
 	)

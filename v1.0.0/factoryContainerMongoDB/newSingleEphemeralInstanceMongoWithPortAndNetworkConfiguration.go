@@ -5,7 +5,7 @@ import (
 	iotmakerDocker "github.com/helmutkemper/iotmaker.docker"
 )
 
-func NewSingleEphemeralInstanceMongoWithPortWithNetworkConfiguration(
+func NewSingleEphemeralInstanceMongoWithPortAndNetworkConfiguration(
 	containerName string,
 	newContainerRestartPolicy iotmakerDocker.RestartPolicy,
 	networkAutoConfiguration *iotmakerDocker.NextNetworkAutoConfiguration,

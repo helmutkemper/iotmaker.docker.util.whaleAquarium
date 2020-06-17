@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"github.com/docker/docker/api/types/mount"
 	iotmakerDocker "github.com/helmutkemper/iotmaker.docker"
-	"github.com/helmutkemper/iotmaker.docker.util.whaleAquarium/factoryWhaleAquarium"
 	"github.com/helmutkemper/iotmaker.docker/factoryDocker"
 	"io/ioutil"
 	"net/http"
@@ -32,7 +31,7 @@ func ExampleNewContainerFromRemoteServerChangeVolumes() {
 
 	}(*pullStatusChannel)
 
-	err, volumesList = factoryWhaleAquarium.NewVolumeMount(
+	err, volumesList = factoryDocker.NewVolumeMount(
 		[]iotmakerDocker.Mount{
 			{
 				MountType:   iotmakerDocker.KVolumeMountTypeBind,

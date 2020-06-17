@@ -12,7 +12,7 @@ import (
 	"time"
 )
 
-func ExampleNewSingleEphemeralInstanceMongoWithPortWithNetworkConfiguration() {
+func ExampleNewSingleEphemeralInstanceMongoWithPortAndNetworkConfiguration() {
 	var err error
 	var newPort nat.Port
 	var pullStatusChannel = factoryDocker.NewImagePullStatusChannel()
@@ -43,7 +43,7 @@ func ExampleNewSingleEphemeralInstanceMongoWithPortWithNetworkConfiguration() {
 		panic(err)
 	}
 
-	err, _, _ = NewSingleEphemeralInstanceMongoWithPortWithNetworkConfiguration(
+	err, _, _ = NewSingleEphemeralInstanceMongoWithPortAndNetworkConfiguration(
 		"container_a_delete_before_test",
 		iotmakerDocker.KRestartPolicyOnFailure,
 		networkAutoConfiguration,
@@ -60,7 +60,7 @@ func ExampleNewSingleEphemeralInstanceMongoWithPortWithNetworkConfiguration() {
 		panic(err)
 	}
 
-	err, _, _ = NewSingleEphemeralInstanceMongoWithPortWithNetworkConfiguration(
+	err, _, _ = NewSingleEphemeralInstanceMongoWithPortAndNetworkConfiguration(
 		"container_b_delete_before_test",
 		iotmakerDocker.KRestartPolicyOnFailure,
 		networkAutoConfiguration,
@@ -77,7 +77,7 @@ func ExampleNewSingleEphemeralInstanceMongoWithPortWithNetworkConfiguration() {
 		panic(err)
 	}
 
-	err, _, _ = NewSingleEphemeralInstanceMongoWithPortWithNetworkConfiguration(
+	err, _, _ = NewSingleEphemeralInstanceMongoWithPortAndNetworkConfiguration(
 		"container_c_delete_before_test",
 		iotmakerDocker.KRestartPolicyOnFailure,
 		networkAutoConfiguration,

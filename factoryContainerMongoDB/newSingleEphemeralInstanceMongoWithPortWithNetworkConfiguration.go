@@ -8,13 +8,9 @@ import (
 func NewSingleEphemeralInstanceMongoWithPortWithNetworkConfiguration(
 	containerName string,
 	newContainerRestartPolicy iotmakerDocker.RestartPolicy,
+	networkAutoConfiguration *iotmakerDocker.NextNetworkAutoConfiguration,
 	port nat.Port,
 	version MongoDBVersionTag,
-	networkName string,
-	networkDrive iotmakerDocker.NetworkDrive,
-	networkScope,
-	networkSubnet,
-	networkGateway string,
 	pullStatus *chan iotmakerDocker.ContainerPullStatusSendToChannel,
 ) (err error, containerId, networkId string) {
 
@@ -23,11 +19,7 @@ func NewSingleEphemeralInstanceMongoWithPortWithNetworkConfiguration(
 		imageName,
 		containerName,
 		newContainerRestartPolicy,
-		networkName,
-		networkDrive,
-		networkScope,
-		networkSubnet,
-		networkGateway,
+		networkAutoConfiguration,
 		port,
 		pullStatus,
 	)

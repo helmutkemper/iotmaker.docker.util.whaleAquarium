@@ -16,6 +16,7 @@ func ExampleNewSingleEphemeralInstanceMongoWithPortWithNetworkConfiguration() {
 	var err error
 	var newPort nat.Port
 	var pullStatusChannel = factoryDocker.NewImagePullStatusChannel()
+	var networkAutoConfiguration *iotmakerDocker.NextNetworkAutoConfiguration
 
 	go func(c chan iotmakerDocker.ContainerPullStatusSendToChannel) {
 
@@ -32,6 +33,11 @@ func ExampleNewSingleEphemeralInstanceMongoWithPortWithNetworkConfiguration() {
 
 	}(*pullStatusChannel)
 
+	err, _, networkAutoConfiguration = factoryDocker.NewNetwork("network_delete_before_test")
+	if err != nil {
+		panic(err)
+	}
+
 	newPort, err = nat.NewPort("tcp", "27015")
 	if err != nil {
 		panic(err)
@@ -40,13 +46,9 @@ func ExampleNewSingleEphemeralInstanceMongoWithPortWithNetworkConfiguration() {
 	err, _, _ = NewSingleEphemeralInstanceMongoWithPortWithNetworkConfiguration(
 		"container_a_delete_before_test",
 		iotmakerDocker.KRestartPolicyOnFailure,
+		networkAutoConfiguration,
 		newPort,
 		KMongoDBVersionTag_3,
-		"network_delete_before_test",
-		iotmakerDocker.KNetworkDriveBridge,
-		"local",
-		"10.0.0.0/16",
-		"10.0.0.1",
 		pullStatusChannel,
 	)
 	if err != nil && err.Error() != "there is a network with this name" {
@@ -61,13 +63,9 @@ func ExampleNewSingleEphemeralInstanceMongoWithPortWithNetworkConfiguration() {
 	err, _, _ = NewSingleEphemeralInstanceMongoWithPortWithNetworkConfiguration(
 		"container_b_delete_before_test",
 		iotmakerDocker.KRestartPolicyOnFailure,
+		networkAutoConfiguration,
 		newPort,
 		KMongoDBVersionTag_3,
-		"network_delete_before_test",
-		iotmakerDocker.KNetworkDriveBridge,
-		"local",
-		"10.0.0.0/16",
-		"10.0.0.1",
 		pullStatusChannel,
 	)
 	if err != nil && err.Error() != "there is a network with this name" {
@@ -82,13 +80,9 @@ func ExampleNewSingleEphemeralInstanceMongoWithPortWithNetworkConfiguration() {
 	err, _, _ = NewSingleEphemeralInstanceMongoWithPortWithNetworkConfiguration(
 		"container_c_delete_before_test",
 		iotmakerDocker.KRestartPolicyOnFailure,
+		networkAutoConfiguration,
 		newPort,
 		KMongoDBVersionTag_3,
-		"network_delete_before_test",
-		iotmakerDocker.KNetworkDriveBridge,
-		"local",
-		"10.0.0.0/16",
-		"10.0.0.1",
 		pullStatusChannel,
 	)
 	if err != nil && err.Error() != "there is a network with this name" {

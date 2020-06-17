@@ -15,18 +15,13 @@ func newMongoEphemeralWithNetworkConfiguration(
 	imageName,
 	containerName string,
 	containerRestartPolicy iotmakerDocker.RestartPolicy,
-	networkName string,
-	networkDrive iotmakerDocker.NetworkDrive,
-	networkScope,
-	networkSubnet,
-	networkGateway string,
+	networkAutoConfiguration *iotmakerDocker.NextNetworkAutoConfiguration,
 	newPort nat.Port,
 	pullStatus *chan iotmakerDocker.ContainerPullStatusSendToChannel,
 ) (err error, containerId, networkId string) {
 
 	var file []byte
 	var mountList []mount.Mount
-	var networkAutoConfiguration *iotmakerDocker.NextNetworkAutoConfiguration
 	var networkConfig *network.NetworkingConfig
 
 	var relativeConfigFilePathToSave = "./config.conf"
@@ -51,18 +46,7 @@ func newMongoEphemeralWithNetworkConfiguration(
 		return
 	}
 
-	err, networkId, networkAutoConfiguration = dockerSys.NetworkCreate(
-		networkName,
-		networkDrive,
-		networkScope,
-		networkSubnet,
-		networkGateway,
-	)
-	if err != nil {
-		return
-	}
-
-	// image pull and wait (true)
+	// image pull and wait
 	err, _, _ = dockerSys.ImagePull(imageName, pullStatus)
 	if err != nil {
 		return

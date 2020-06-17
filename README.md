@@ -5,20 +5,24 @@ This package makes it easy to install ready-to-use containers.
 
 #### MongoDB:
 
-NewSingleEphemeralInstanceMongo()
-NewSingleEphemeralInstanceMongoLatest()
-NewSingleEphemeralInstanceMongoLatestWithPort()
-NewSingleEphemeralInstanceMongoWithPort()
-NewSingleEphemeralInstanceMongoWithPortAndNetworkConfiguration()
+|Function                                                                               |
+|---------------------------------------------------------------------------------------|
+| NewSingleEphemeralInstanceMongo()                                                     |
+| NewSingleEphemeralInstanceMongoLatest()                                               |
+| NewSingleEphemeralInstanceMongoLatestWithPort()                                       |
+| NewSingleEphemeralInstanceMongoWithPort()                                             |
+| NewSingleEphemeralInstanceMongoWithPortAndNetworkConfiguration()                      |
 
 #### Project from a remote server, like github.com:
 
-NewContainerFromRemoteServer()
-NewContainerFromRemoteServerChangeExposedPortAndVolumes()
-NewContainerFromRemoteServerChangeExposedPortAndVolumesWithNetworkConfiguration()
-NewContainerFromRemoteServerChangeVolumes()
-NewContainerFromRemoteServerChangeVolumesWithNetworkConfiguration()
-NewContainerFromRemoteServerWithNetworkConfiguration()
+|Function                                                                               |
+|---------------------------------------------------------------------------------------|
+| NewContainerFromRemoteServer()                                                        |
+| NewContainerFromRemoteServerChangeExposedPortAndVolumes()                             |
+| NewContainerFromRemoteServerChangeExposedPortAndVolumesWithNetworkConfiguration()     |
+| NewContainerFromRemoteServerChangeVolumes()                                           |
+| NewContainerFromRemoteServerChangeVolumesWithNetworkConfiguration()                   |
+| NewContainerFromRemoteServerWithNetworkConfiguration()                                |
 
 **Sample**:
 

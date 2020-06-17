@@ -20,6 +20,10 @@ NewContainerFromRemoteServerChangeVolumes()
 NewContainerFromRemoteServerChangeVolumesWithNetworkConfiguration()
 NewContainerFromRemoteServerWithNetworkConfiguration()
 
+**Sample**:
+
+[iotmaker.docker.util.whaleAquarium.sample](https://github.com/helmutkemper/iotmaker.docker.util.whaleAquarium.sample)
+
 ##### Server example:
 
 ```

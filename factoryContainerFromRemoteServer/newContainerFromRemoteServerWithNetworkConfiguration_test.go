@@ -2,19 +2,15 @@ package factoryContainerFromRemoteServer
 
 import (
 	"fmt"
-	"github.com/docker/docker/api/types/mount"
-	"github.com/docker/go-connections/nat"
 	iotmakerDocker "github.com/helmutkemper/iotmaker.docker"
-	"github.com/helmutkemper/iotmaker.docker.util.whaleAquarium/factoryWhaleAquarium"
 	"github.com/helmutkemper/iotmaker.docker/factoryDocker"
 	"io/ioutil"
 	"net/http"
 )
 
-func ExampleNewContainerFromRemoteServerChangeExposedPortAndVolumesWithNetworkConfiguration() {
+func ExampleNewContainerFromRemoteServerWithNetworkConfiguration() {
 	var err error
 	var pullStatusChannel = factoryDocker.NewImagePullStatusChannel()
-	var volumesList []mount.Mount
 	var networkAutoConfiguration *iotmakerDocker.NextNetworkAutoConfiguration
 
 	go func(c chan iotmakerDocker.ContainerPullStatusSendToChannel) {
@@ -32,52 +28,18 @@ func ExampleNewContainerFromRemoteServerChangeExposedPortAndVolumesWithNetworkCo
 
 	}(*pullStatusChannel)
 
-	currentPort, err := nat.NewPort("tcp", "3000")
-	if err != nil {
-		panic(err)
-	}
-
-	newPort, err := nat.NewPort("tcp", "8080")
-	if err != nil {
-		panic(err)
-	}
-
-	currentPortList := []nat.Port{
-		currentPort,
-	}
-
-	newPortList := []nat.Port{
-		newPort,
-	}
-
-	err, volumesList = factoryWhaleAquarium.NewVolumeMount(
-		[]iotmakerDocker.Mount{
-			{
-				MountType:   iotmakerDocker.KVolumeMountTypeBind,
-				Source:      "C:\\static", //absolute or relative to this code
-				Destination: "/static",    //folder inside container
-			},
-		},
-	)
-	if err != nil {
-		panic(err)
-	}
-
 	err, _, networkAutoConfiguration = factoryDocker.NewNetwork("network_delete_before_test")
 	if err != nil {
 		panic(err)
 	}
 
-	err, _, _, _ = NewContainerFromRemoteServerChangeExposedPortAndVolumesWithNetworkConfiguration(
+	err, _, _, _ = NewContainerFromRemoteServerWithNetworkConfiguration(
 		"server_delete_before_test:latest",
 		"container_delete_before_test",
 		iotmakerDocker.KRestartPolicyOnFailure,
 		networkAutoConfiguration,
 		"https://github.com/helmutkemper/iotmaker.docker.util.whaleAquarium.sample.git",
 		[]string{},
-		currentPortList,
-		newPortList,
-		volumesList,
 		pullStatusChannel,
 	)
 	if err != nil {
@@ -86,7 +48,7 @@ func ExampleNewContainerFromRemoteServerChangeExposedPortAndVolumesWithNetworkCo
 
 	var resp *http.Response
 	var site []byte
-	resp, err = http.Get("http://localhost:8080")
+	resp, err = http.Get("http://localhost:3000")
 	if err != nil {
 		panic(err)
 	}

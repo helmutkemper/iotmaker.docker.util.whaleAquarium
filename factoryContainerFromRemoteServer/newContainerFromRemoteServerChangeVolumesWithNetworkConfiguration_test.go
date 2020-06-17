@@ -14,6 +14,7 @@ func ExampleNewContainerFromRemoteServerChangeVolumesWithNetworkConfiguration() 
 	var err error
 	var pullStatusChannel = factoryDocker.NewImagePullStatusChannel()
 	var volumesList []mount.Mount
+	var networkAutoConfiguration *iotmakerDocker.NextNetworkAutoConfiguration
 
 	go func(c chan iotmakerDocker.ContainerPullStatusSendToChannel) {
 
@@ -43,15 +44,16 @@ func ExampleNewContainerFromRemoteServerChangeVolumesWithNetworkConfiguration() 
 		panic(err)
 	}
 
+	err, _, networkAutoConfiguration = factoryDocker.NewNetwork("network_delete_before_test")
+	if err != nil {
+		panic(err)
+	}
+
 	err, _, _, _ = NewContainerFromRemoteServerChangeVolumesWithNetworkConfiguration(
 		"server_delete_before_test:latest",
 		"container_delete_before_test",
 		iotmakerDocker.KRestartPolicyOnFailure,
-		"network_delete_before_test",
-		iotmakerDocker.KNetworkDriveBridge,
-		"local",
-		"10.0.0.0/16",
-		"10.0.0.1",
+		networkAutoConfiguration,
 		"https://github.com/helmutkemper/iotmaker.docker.util.whaleAquarium.sample.git",
 		[]string{},
 		volumesList,

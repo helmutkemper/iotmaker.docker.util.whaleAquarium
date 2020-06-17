@@ -11,11 +11,7 @@ func NewContainerFromRemoteServerWithNetworkConfiguration(
 	newImageName,
 	newContainerName string,
 	newContainerRestartPolicy iotmakerDocker.RestartPolicy,
-	networkName string,
-	networkDrive iotmakerDocker.NetworkDrive,
-	networkScope,
-	networkSubnet,
-	networkGateway string,
+	networkAutoConfiguration *iotmakerDocker.NextNetworkAutoConfiguration,
 	serverPath string,
 	imageTags []string,
 	buildStatus *chan iotmakerDocker.ContainerPullStatusSendToChannel,
@@ -24,23 +20,11 @@ func NewContainerFromRemoteServerWithNetworkConfiguration(
 	var containersVolumes []mount.Mount
 	var imageVolumesList []string
 	var containersVolumeTmpList = make([]iotmakerDocker.Mount, 0)
-	var networkAutoConfiguration *iotmakerDocker.NextNetworkAutoConfiguration
 	var networkConfig *network.NetworkingConfig
 
 	// init docker
 	var dockerSys = iotmakerDocker.DockerSystem{}
 	err = dockerSys.Init()
-	if err != nil {
-		return
-	}
-
-	err, networkId, networkAutoConfiguration = dockerSys.NetworkCreate(
-		networkName,
-		networkDrive,
-		networkScope,
-		networkSubnet,
-		networkGateway,
-	)
 	if err != nil {
 		return
 	}

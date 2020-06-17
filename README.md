@@ -27,8 +27,8 @@ NewContainerFromRemoteServerWithNetworkConfiguration()
 ##### Server example:
 
 ```
-server := "https://github.com/__USER__/__PROJECT__.git"
-server := "https://x-access-token:__TOKEN__@github.com/__USER__/__PROJECT__.git"
+server := "https://github.com/helmutkemper/iotmaker.docker.util.whaleAquarium.sample.git"
+server := "https://x-access-token:__TOKEN__@helmutkemper/iotmaker.docker.util.whaleAquarium.sample.git"
 ```
 
 ##### To get a github token

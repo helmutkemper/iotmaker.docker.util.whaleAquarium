@@ -106,7 +106,7 @@ func decode(page int) DockerHubPageJSon {
 	var jsonData []byte
 	var pageData DockerHubPageJSon
 	response, err := http.Get(
-		fmt.Sprintf("https://hub.docker.com/v2/repositories/library/mongo/tags/?page_size=100&page=%v", page),
+		fmt.Sprintf("https://hub.docker.com/v2/repositories/library/rabbitmq/tags/?page_size=100&page=%v", page),
 	)
 	if err != nil {
 		panic(err)

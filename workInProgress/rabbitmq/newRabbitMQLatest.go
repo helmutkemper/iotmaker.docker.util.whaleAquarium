@@ -20,8 +20,14 @@ func NewRabbitMQLatest(
 
 	var mountList []mount.Mount
 	var networkConfig *network.NetworkingConfig
+	var currentPortHttpAPI nat.Port
+	var currentPortAMPQ nat.Port
+	var currentPortInterNodeAndCli nat.Port
 
 	var imageName = "rabbitmq:" + version.String()
+	currentPortHttpAPI, err = nat.NewPort("tcp", "15672")
+	currentPortAMPQ, err = nat.NewPort("tcp", "5672")
+	currentPortInterNodeAndCli, err = nat.NewPort("tcp", "25676")
 
 	// init docker
 	var dockerSys = iotmakerDocker.DockerSystem{}
@@ -36,22 +42,16 @@ func NewRabbitMQLatest(
 		return
 	}
 
-	newPortList := nat.PortMap{
-		portHttpAPI: []nat.PortBinding{
-			{
-				HostPort: portHttpAPI.Port(),
-			},
-		},
-		portAMPQ: []nat.PortBinding{
-			{
-				HostPort: portAMPQ.Port(),
-			},
-		},
-		portInterNodeAndCli: []nat.PortBinding{
-			{
-				HostPort: portInterNodeAndCli.Port(),
-			},
-		},
+	currentPortList := []nat.Port{
+		currentPortHttpAPI,
+		currentPortAMPQ,
+		currentPortInterNodeAndCli,
+	}
+
+	newPortList := []nat.Port{
+		portHttpAPI,
+		portAMPQ,
+		portInterNodeAndCli,
 	}
 
 	err, networkConfig = networkAutoConfiguration.GetNext()
@@ -59,12 +59,13 @@ func NewRabbitMQLatest(
 		return
 	}
 
-	err, containerId = dockerSys.ContainerCreateExposePortAndStart(
+	err, containerId = dockerSys.ContainerCreateChangeExposedPortAndStart(
 		imageName,
 		containerName,
 		containerRestartPolicy,
 		mountList,
 		networkConfig,
+		currentPortList,
 		newPortList,
 	)
 

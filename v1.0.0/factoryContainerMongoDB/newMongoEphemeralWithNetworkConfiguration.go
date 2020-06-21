@@ -46,6 +46,11 @@ func newMongoEphemeralWithNetworkConfiguration(
 		return
 	}
 
+	err, networkConfig = networkAutoConfiguration.GetNext()
+	if err != nil {
+		return
+	}
+
 	// image pull and wait
 	err, _, _ = dockerSys.ImagePull(imageName, pullStatus)
 	if err != nil {
@@ -71,13 +76,11 @@ func newMongoEphemeralWithNetworkConfiguration(
 		currentPort,
 	}
 
+	var IpAddress string
+	err, IpAddress = networkAutoConfiguration.GetCurrentIpAddress()
+	newPort, err = nat.NewPort(newPort.Proto(), IpAddress+":"+newPort.Port())
 	newPortList := []nat.Port{
 		newPort,
-	}
-
-	err, networkConfig = networkAutoConfiguration.GetNext()
-	if err != nil {
-		return
 	}
 
 	err, containerId = dockerSys.ContainerCreateChangeExposedPortAndStart(

@@ -33,12 +33,14 @@ func ExampleNewSingleEphemeralInstanceMongoWithPortAndNetworkConfiguration() {
 
 	}(*pullStatusChannel)
 
-	err, _, networkAutoConfiguration = factoryDocker.NewNetwork("network_delete_before_test")
+	err, _, networkAutoConfiguration = factoryDocker.NewNetwork(
+		"network_delete_before_test",
+	)
 	if err != nil {
 		panic(err)
 	}
 
-	newPort, err = nat.NewPort("tcp", "27015")
+	newPort, err = nat.NewPort("tcp", "27017")
 	if err != nil {
 		panic(err)
 	}
@@ -55,7 +57,7 @@ func ExampleNewSingleEphemeralInstanceMongoWithPortAndNetworkConfiguration() {
 		panic(err)
 	}
 
-	newPort, err = nat.NewPort("tcp", "27016")
+	newPort, err = nat.NewPort("tcp", "27017")
 	if err != nil {
 		panic(err)
 	}
@@ -93,9 +95,10 @@ func ExampleNewSingleEphemeralInstanceMongoWithPortAndNetworkConfiguration() {
 	var ctx context.Context
 	mongoClient, err = mongo.NewClient(
 		options.Client().ApplyURI(
-			"mongodb://127.0.0.1:27015," +
-				"127.0.0.1:27016," +
-				"127.0.0.1:27017",
+			"mongodb://" +
+				"10.0.0.1:27017," +
+				"10.0.0.2:27017," +
+				"10.0.0.3:27017",
 		),
 	)
 	if err != nil {

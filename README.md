@@ -1,5 +1,7 @@
 # iotmaker.docker.util.whaleAquarium
 
+> work in progress! sorry...
+
 This package makes it easy to install ready-to-use containers.
 > For usage examples, see the test functions within the code
 

@@ -36,7 +36,7 @@ func NewContainerFromRemoteServerChangeVolumesWithNetworkConfiguration(
 		return
 	}
 
-	err, containerId = dockerSys.ContainerCreateAndStart(
+	err, containerId = dockerSys.ContainerCreateExposePortsAutomaticallyAndStart(
 		newImageName,
 		newContainerName,
 		newContainerRestartPolicy,

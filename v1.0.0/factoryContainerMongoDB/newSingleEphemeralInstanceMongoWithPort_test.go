@@ -77,6 +77,7 @@ func ExampleNewSingleEphemeralInstanceMongoWithPort() {
 		panic(err)
 	}
 
+	time.Sleep(time.Second * 2)
 	var mongoClient *mongo.Client
 	var ctx context.Context
 	mongoClient, err = mongo.NewClient(

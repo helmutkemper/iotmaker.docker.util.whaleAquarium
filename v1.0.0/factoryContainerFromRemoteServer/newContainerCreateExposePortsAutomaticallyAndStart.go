@@ -7,7 +7,7 @@ import (
 )
 
 // English: Create a image and create and start a container from project inside into server
-func NewContainerFromRemoteServer(
+func NewContainerCreateExposePortsAutomaticallyAndStart(
 	newImageName,
 	newContainerName,
 	serverPath string,
@@ -52,7 +52,7 @@ func NewContainerFromRemoteServer(
 		return
 	}
 
-	err, containerId = dockerSys.ContainerCreateAndStart(
+	err, containerId = dockerSys.ContainerCreateExposePortsAutomaticallyAndStart(
 		newImageName,
 		newContainerName,
 		iotmakerDocker.KRestartPolicyUnlessStopped,

@@ -28,7 +28,7 @@ func NewContainerFromRemoteServerChangeVolumes(
 		return
 	}
 
-	err, containerId = dockerSys.ContainerCreateAndStart(
+	err, containerId = dockerSys.ContainerCreateExposePortsAutomaticallyAndStart(
 		newImageName,
 		newContainerName,
 		iotmakerDocker.KRestartPolicyUnlessStopped,

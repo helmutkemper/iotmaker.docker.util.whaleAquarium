@@ -29,7 +29,7 @@ func ExampleNewContainerFromRemoteServer() {
 
 	}(*pullStatusChannel)
 
-	err, _, _ = NewContainerFromRemoteServer(
+	err, _, _ = NewContainerCreateExposePortsAutomaticallyAndStart(
 		"server_delete_before_test:latest",
 		"container_delete_before_test",
 		"https://github.com/helmutkemper/iotmaker.docker.util.whaleAquarium.sample.git",

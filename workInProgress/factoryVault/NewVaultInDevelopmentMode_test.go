@@ -10,6 +10,8 @@ import (
 	"time"
 )
 
+// this example install an vault container and test
+// https://www.vaultproject.io/
 func ExampleNewVaultInDevelopmentMode() {
 
 	var err error
@@ -19,7 +21,6 @@ func ExampleNewVaultInDevelopmentMode() {
 	var vaultRootToken string
 	var vaultUnsealKey string
 
-	//var vaultAddr  = "0.0.0.0:8200"
 	var pullStatusChannel = factoryDocker.NewImagePullStatusChannel()
 
 	go func(c chan iotmakerDocker.ContainerPullStatusSendToChannel) {
@@ -82,6 +83,18 @@ func ExampleNewVaultInDevelopmentMode() {
 
 	d := dataFromValt.Data
 	fmt.Printf("vault data: %v\n", d["data"])
+
+	// stop and remove a container
+	var dockerSys = iotmakerDocker.DockerSystem{}
+	err = dockerSys.Init()
+	if err != nil {
+		return
+	}
+
+	err = dockerSys.ContainerStopAndRemove(containerID, true, false, false)
+	if err != nil {
+		return
+	}
 
 	// Output:
 	// image pull complete!

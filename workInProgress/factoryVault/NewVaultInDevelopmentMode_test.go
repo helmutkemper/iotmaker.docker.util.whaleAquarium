@@ -1,7 +1,6 @@
 package factoryVault
 
 import (
-	"encoding/json"
 	"errors"
 	"fmt"
 	"github.com/hashicorp/vault/api"
@@ -81,9 +80,10 @@ func ExampleNewVaultInDevelopmentMode() {
 		panic(err)
 	}
 
-	yourRealData, _ := json.Marshal(dataFromValt.Data)
-	fmt.Printf("vault data: %s\n", yourRealData)
+	d := dataFromValt.Data
+	fmt.Printf("vault data: %v\n", d["data"])
 
 	// Output:
-	// vault data: {"data":{"your_key":"please understand: put your data inside the \"data\" key or the vault will return the error \u003e\u003eno data provided\u003c\u003c"},"metadata":{"created_time":"2020-07-30T19:56:08.675428254Z","deletion_time":"","destroyed":false,"version":4}}
+	// image pull complete!
+	// vault data: map[your_key:please understand: put your data inside the "data" key or the vault will return the error >>no data provided<<]
 }

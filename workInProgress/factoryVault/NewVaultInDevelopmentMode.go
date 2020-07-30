@@ -2,6 +2,8 @@ package factoryVault
 
 import (
 	"bytes"
+	"github.com/docker/docker/api/types/mount"
+	"github.com/docker/go-connections/nat"
 	iotmakerDocker "github.com/helmutkemper/iotmaker.docker"
 	"regexp"
 )
@@ -29,7 +31,7 @@ func NewVaultInDevelopmentMode(
 	var upgradingKeysFinishedRegExp *regexp.Regexp
 
 	var imageName = "vault:" + version.String()
-	//var mountList []mount.Mount
+	var mountList []mount.Mount
 	var log []byte
 	var logData [][]byte
 	var tmp []byte
@@ -46,44 +48,30 @@ func NewVaultInDevelopmentMode(
 		return
 	}
 
-	// define an external MongoDB config file path
-	//err, mountList = factoryDocker.NewVolumeMount(
-	//  []iotmakerDocker.Mount{
-	//    {
-	//      MountType:   iotmakerDocker.KVolumeMountTypeBind,
-	//      Source:      relativeConfigFilePathToSave,
-	//      Destination: "/etc/mongo.conf",
-	//    },
-	//  },
-	//)
-	//if err != nil {
-	//  return
-	//}
+	defaultListenPort, _ := nat.NewPort("tcp", "8200")
+	unknownPort, _ := nat.NewPort("tcp", "8201")
+	currentPortList := []nat.Port{
+		defaultListenPort,
+		unknownPort,
+	}
 
-	//defaultListenPort, _ := nat.NewPort("tcp", "8200")
-	//unknownPort, _       := nat.NewPort("tcp", "8201")
-	//currentPortList := []nat.Port{
-	//  defaultListenPort,
-	//  unknownPort,
-	//}
-	//
-	//newPortList := []nat.Port{
-	//  defaultListenPort,
-	//  unknownPort,
-	//}
+	newPortList := []nat.Port{
+		defaultListenPort,
+		unknownPort,
+	}
 
-	//err, containerId = dockerSys.ContainerCreateChangeExposedPortAndStart(
-	//  imageName,
-	//  containerName,
-	//  iotmakerDocker.KRestartPolicyUnlessStopped,
-	//  mountList,
-	//  nil,
-	//  currentPortList,
-	//  newPortList,
-	//)
-	//if err != nil {
-	//  return
-	//}
+	err, containerId = dockerSys.ContainerCreateChangeExposedPortAndStart(
+		imageName,
+		containerName,
+		iotmakerDocker.KRestartPolicyUnlessStopped,
+		mountList,
+		nil,
+		currentPortList,
+		newPortList,
+	)
+	if err != nil {
+		return
+	}
 
 	err, containerId = dockerSys.ContainerFindIdByName("vaultContainer")
 

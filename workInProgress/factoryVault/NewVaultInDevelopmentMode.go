@@ -6,6 +6,8 @@ import (
 	"regexp"
 )
 
+//Manage Secrets and Protect Sensitive Data
+//https://www.vaultproject.io/
 func NewVaultInDevelopmentMode(
 	containerName string,
 	version VaultVersionTag,

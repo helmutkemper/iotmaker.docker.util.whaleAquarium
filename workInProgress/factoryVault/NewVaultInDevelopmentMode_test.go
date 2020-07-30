@@ -81,8 +81,10 @@ func ExampleNewVaultInDevelopmentMode() {
 		panic(err)
 	}
 
-	d := dataFromValt.Data
-	fmt.Printf("vault data: %v\n", d["data"])
+	if dataFromValt != nil {
+		d := dataFromValt.Data
+		fmt.Printf("vault data: %v\n", d["data"])
+	}
 
 	// stop and remove a container
 	var dockerSys = iotmakerDocker.DockerSystem{}

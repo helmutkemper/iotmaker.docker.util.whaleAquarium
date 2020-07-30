@@ -2,6 +2,7 @@ package factoryVault
 
 import (
 	"encoding/json"
+	"errors"
 	"fmt"
 	"github.com/hashicorp/vault/api"
 	iotmakerDocker "github.com/helmutkemper/iotmaker.docker"
@@ -11,6 +12,7 @@ import (
 )
 
 func ExampleNewVaultInDevelopmentMode() {
+
 	var err error
 	var containerID string
 	var ApiAddress string
@@ -45,35 +47,43 @@ func ExampleNewVaultInDevelopmentMode() {
 		panic(err)
 	}
 	_ = ClusterAddress
+	_ = vaultUnsealKey
 
-	fmt.Printf("container ID: %v\n", containerID)
+	if containerID == "" {
+		err = errors.New("container id not found")
+		panic(err)
+	}
 
 	var httpClient = &http.Client{
 		Timeout: 10 * time.Second,
 	}
 	var client *api.Client
-	var data *api.Secret
+	var dataFromValt *api.Secret
 	client, err = api.NewClient(&api.Config{Address: "http://" + ApiAddress, HttpClient: httpClient})
 	if err != nil {
 		panic(err)
 	}
 
-	_ = vaultUnsealKey
 	client.SetToken(vaultRootToken)
 
-	_, err = client.Logical().Write("secret/data/my-secret", map[string]interface{}{"teste": "testado ok"})
+	var dataToVault = make(map[string]interface{})
+	var yourData = make(map[string]interface{})
+	yourData["your_key"] = "please understand: put your data inside the \"data\" key or the vault will return the error >>no data provided<<"
+	dataToVault["data"] = yourData
+
+	_, err = client.Logical().Write("secret/data/my-secret", dataToVault)
 	if err != nil {
 		panic(err)
 	}
 
-	data, err = client.Logical().Read("secret/data/my-secret")
+	dataFromValt, err = client.Logical().Read("secret/data/my-secret")
 	if err != nil {
 		panic(err)
 	}
 
-	b, _ := json.Marshal(data.Data)
-	fmt.Println(string(b))
+	yourRealData, _ := json.Marshal(dataFromValt.Data)
+	fmt.Printf("vault data: %s\n", yourRealData)
 
 	// Output:
-	//
+	// vault data: {"data":{"your_key":"please understand: put your data inside the \"data\" key or the vault will return the error \u003e\u003eno data provided\u003c\u003c"},"metadata":{"created_time":"2020-07-30T19:56:08.675428254Z","deletion_time":"","destroyed":false,"version":4}}
 }

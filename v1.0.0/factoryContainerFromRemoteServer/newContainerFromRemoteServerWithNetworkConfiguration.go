@@ -34,6 +34,11 @@ func NewContainerFromRemoteServerWithNetworkConfiguration(
 		return
 	}
 
+	err, imageId = dockerSys.ImageFindIdByName(newImageName)
+	if err != nil {
+		return
+	}
+
 	err, imageVolumesList = dockerSys.ImageListExposedVolumesByName(newImageName)
 	if err != nil {
 		return

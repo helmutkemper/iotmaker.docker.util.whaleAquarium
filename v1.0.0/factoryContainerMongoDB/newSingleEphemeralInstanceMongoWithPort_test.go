@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"github.com/docker/go-connections/nat"
 	iotmakerDocker "github.com/helmutkemper/iotmaker.docker"
+	"github.com/helmutkemper/iotmaker.docker.util.whaleAquarium/v1.0.0/toolsGarbageCollector"
 	"github.com/helmutkemper/iotmaker.docker/factoryDocker"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
@@ -16,6 +17,9 @@ func ExampleNewSingleEphemeralInstanceMongoWithPort() {
 	var err error
 	var newPort nat.Port
 	var pullStatusChannel = factoryDocker.NewImagePullStatusChannel()
+	var containerIDA string
+	var containerIDB string
+	var containerIDC string
 
 	go func(c chan iotmakerDocker.ContainerPullStatusSendToChannel) {
 
@@ -37,7 +41,7 @@ func ExampleNewSingleEphemeralInstanceMongoWithPort() {
 		panic(err)
 	}
 
-	err, _ = NewSingleEphemeralInstanceMongoWithPort(
+	err, containerIDA = NewSingleEphemeralInstanceMongoWithPort(
 		"container_a_delete_before_test",
 		newPort,
 		KMongoDBVersionTag_3,
@@ -52,7 +56,7 @@ func ExampleNewSingleEphemeralInstanceMongoWithPort() {
 		panic(err)
 	}
 
-	err, _ = NewSingleEphemeralInstanceMongoWithPort(
+	err, containerIDB = NewSingleEphemeralInstanceMongoWithPort(
 		"container_b_delete_before_test",
 		newPort,
 		KMongoDBVersionTag_3,
@@ -67,7 +71,7 @@ func ExampleNewSingleEphemeralInstanceMongoWithPort() {
 		panic(err)
 	}
 
-	err, _ = NewSingleEphemeralInstanceMongoWithPort(
+	err, containerIDC = NewSingleEphemeralInstanceMongoWithPort(
 		"container_c_delete_before_test",
 		newPort,
 		KMongoDBVersionTag_3,
@@ -104,6 +108,38 @@ func ExampleNewSingleEphemeralInstanceMongoWithPort() {
 	}
 
 	fmt.Println("ping ok")
+
+	// stop and remove a container
+	var dockerSys = iotmakerDocker.DockerSystem{}
+	err = dockerSys.Init()
+	if err != nil {
+		panic(err)
+	}
+
+	err = dockerSys.ContainerStopAndRemove(containerIDA, true, false, false)
+	if err != nil {
+		panic(err)
+	}
+
+	err = dockerSys.ContainerStopAndRemove(containerIDB, true, false, false)
+	if err != nil {
+		panic(err)
+	}
+
+	err = dockerSys.ContainerStopAndRemove(containerIDC, true, false, false)
+	if err != nil {
+		panic(err)
+	}
+
+	err = toolsGarbageCollector.ImageUnreferencedRemove()
+	if err != nil {
+		panic(err)
+	}
+
+	err = toolsGarbageCollector.VolumesUnreferencedRemove()
+	if err != nil {
+		panic(err)
+	}
 
 	// Output:
 	// image pull complete!

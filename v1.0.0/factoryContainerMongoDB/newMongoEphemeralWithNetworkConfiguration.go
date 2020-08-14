@@ -23,6 +23,7 @@ func newMongoEphemeralWithNetworkConfiguration(
 	var file []byte
 	var mountList []mount.Mount
 	var networkConfig *network.NetworkingConfig
+	var currentPort nat.Port
 
 	var relativeConfigFilePathToSave = "./config.conf"
 
@@ -71,14 +72,14 @@ func newMongoEphemeralWithNetworkConfiguration(
 		return
 	}
 
-	currentPort, _ := nat.NewPort("tcp", "27017")
+	currentPort, err = nat.NewPort("tcp", "27017")
+	if err != nil {
+		return
+	}
 	currentPortList := []nat.Port{
 		currentPort,
 	}
 
-	var IpAddress string
-	err, IpAddress = networkAutoConfiguration.GetCurrentIpAddress()
-	newPort, err = nat.NewPort(newPort.Proto(), IpAddress+":"+newPort.Port())
 	newPortList := []nat.Port{
 		newPort,
 	}

@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	iotmakerDocker "github.com/helmutkemper/iotmaker.docker"
+	"github.com/helmutkemper/iotmaker.docker.util.whaleAquarium/v1.0.0/toolsGarbageCollector"
 	"github.com/helmutkemper/iotmaker.docker/factoryDocker"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
@@ -14,6 +15,7 @@ import (
 func ExampleNewSingleEphemeralInstanceMongo() {
 	var err error
 	var pullStatusChannel = factoryDocker.NewImagePullStatusChannel()
+	var containerID string
 
 	go func(c chan iotmakerDocker.ContainerPullStatusSendToChannel) {
 
@@ -30,7 +32,7 @@ func ExampleNewSingleEphemeralInstanceMongo() {
 
 	}(*pullStatusChannel)
 
-	err, _ = NewSingleEphemeralInstanceMongo(
+	err, containerID = NewSingleEphemeralInstanceMongo(
 		"container_delete_before_test",
 		KMongoDBVersionTag_latest,
 		pullStatusChannel,
@@ -59,6 +61,28 @@ func ExampleNewSingleEphemeralInstanceMongo() {
 	}
 
 	fmt.Println("ping ok")
+
+	// stop and remove a container
+	var dockerSys = iotmakerDocker.DockerSystem{}
+	err = dockerSys.Init()
+	if err != nil {
+		panic(err)
+	}
+
+	err = dockerSys.ContainerStopAndRemove(containerID, true, false, false)
+	if err != nil {
+		panic(err)
+	}
+
+	err = toolsGarbageCollector.ImageUnreferencedRemove()
+	if err != nil {
+		panic(err)
+	}
+
+	err = toolsGarbageCollector.VolumesUnreferencedRemove()
+	if err != nil {
+		panic(err)
+	}
 
 	// Output:
 	// image pull complete!

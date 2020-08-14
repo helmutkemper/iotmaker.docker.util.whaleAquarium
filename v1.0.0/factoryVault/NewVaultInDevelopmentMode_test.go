@@ -90,12 +90,12 @@ func ExampleNewVaultInDevelopmentMode() {
 	var dockerSys = iotmakerDocker.DockerSystem{}
 	err = dockerSys.Init()
 	if err != nil {
-		return
+		panic(err)
 	}
 
 	err = dockerSys.ContainerStopAndRemove(containerID, true, false, false)
 	if err != nil {
-		return
+		panic(err)
 	}
 
 	// Output:

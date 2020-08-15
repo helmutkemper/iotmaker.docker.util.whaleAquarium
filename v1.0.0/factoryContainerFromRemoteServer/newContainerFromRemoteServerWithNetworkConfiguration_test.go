@@ -3,6 +3,7 @@ package factoryContainerFromRemoteServer
 import (
 	"fmt"
 	iotmakerDocker "github.com/helmutkemper/iotmaker.docker"
+	"github.com/helmutkemper/iotmaker.docker.util.whaleAquarium/v1.0.0/toolsGarbageCollector"
 	"github.com/helmutkemper/iotmaker.docker/factoryDocker"
 	"io/ioutil"
 	"net/http"
@@ -59,6 +60,11 @@ func ExampleNewContainerFromRemoteServerWithNetworkConfiguration() {
 	}
 
 	err = resp.Body.Close()
+	if err != nil {
+		panic(err)
+	}
+
+	err = toolsGarbageCollector.RemoveAllByNameContains("delete")
 	if err != nil {
 		panic(err)
 	}

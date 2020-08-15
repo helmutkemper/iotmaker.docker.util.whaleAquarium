@@ -39,13 +39,6 @@ func ExampleNewSingleEphemeralInstanceMongoWithNetworkConfigurationAndWithoutPor
 	var pullStatusChannel = factoryDocker.NewImagePullStatusChannel()
 	var networkAutoConfiguration *iotmakerDocker.NextNetworkAutoConfiguration
 
-	var containerIDMongoA string
-	var containerIDMongoB string
-	var containerIDMongoC string
-	var containerIDServer string
-	var networkID string
-	var imageID string
-
 	go func(c chan iotmakerDocker.ContainerPullStatusSendToChannel) {
 
 		for {
@@ -62,7 +55,7 @@ func ExampleNewSingleEphemeralInstanceMongoWithNetworkConfigurationAndWithoutPor
 
 	}(*pullStatusChannel)
 
-	err, networkID, networkAutoConfiguration = factoryDocker.NewNetwork(
+	err, _, networkAutoConfiguration = factoryDocker.NewNetwork(
 		"network_delete_before_test",
 	)
 	if err != nil {
@@ -70,7 +63,7 @@ func ExampleNewSingleEphemeralInstanceMongoWithNetworkConfigurationAndWithoutPor
 	}
 
 	// address: 10.0.0.2
-	err, containerIDMongoA, _ = NewSingleEphemeralInstanceMongoWithNetworkConfigurationAndWithoutPort(
+	err, _, _ = NewSingleEphemeralInstanceMongoWithNetworkConfigurationAndWithoutPort(
 		"container_a_delete_before_test",
 		iotmakerDocker.KRestartPolicyOnFailure,
 		networkAutoConfiguration,
@@ -82,7 +75,7 @@ func ExampleNewSingleEphemeralInstanceMongoWithNetworkConfigurationAndWithoutPor
 	}
 
 	// address: 10.0.0.3
-	err, containerIDMongoB, _ = NewSingleEphemeralInstanceMongoWithNetworkConfigurationAndWithoutPort(
+	err, _, _ = NewSingleEphemeralInstanceMongoWithNetworkConfigurationAndWithoutPort(
 		"container_b_delete_before_test",
 		iotmakerDocker.KRestartPolicyOnFailure,
 		networkAutoConfiguration,
@@ -94,7 +87,7 @@ func ExampleNewSingleEphemeralInstanceMongoWithNetworkConfigurationAndWithoutPor
 	}
 
 	// address: 10.0.0.4
-	err, containerIDMongoC, _ = NewSingleEphemeralInstanceMongoWithNetworkConfigurationAndWithoutPort(
+	err, _, _ = NewSingleEphemeralInstanceMongoWithNetworkConfigurationAndWithoutPort(
 		"container_c_delete_before_test",
 		iotmakerDocker.KRestartPolicyOnFailure,
 		networkAutoConfiguration,
@@ -106,7 +99,7 @@ func ExampleNewSingleEphemeralInstanceMongoWithNetworkConfigurationAndWithoutPor
 	}
 
 	// address: 10.0.0.5:8080
-	err, imageID, containerIDServer, _ = factoryContainerFromRemoteServer.NewContainerFromRemoteServerWithNetworkConfiguration(
+	err, _, _, _ = factoryContainerFromRemoteServer.NewContainerFromRemoteServerWithNetworkConfiguration(
 		"image_server_delete_before_test:latest",
 		"cont_server_delete_before_test",
 		iotmakerDocker.KRestartPolicyUnlessStopped,
@@ -124,48 +117,7 @@ func ExampleNewSingleEphemeralInstanceMongoWithNetworkConfigurationAndWithoutPor
 	verifyServer("http://127.0.0.1:8080/?db=10.0.0.4:27017")
 
 	// stop and remove a container
-	var dockerSys = iotmakerDocker.DockerSystem{}
-	err = dockerSys.Init()
-	if err != nil {
-		panic(err)
-	}
-
-	err = dockerSys.ContainerStopAndRemove(containerIDMongoA, true, false, false)
-	if err != nil {
-		panic(err)
-	}
-
-	err = dockerSys.ContainerStopAndRemove(containerIDMongoB, true, false, false)
-	if err != nil {
-		panic(err)
-	}
-
-	err = dockerSys.ContainerStopAndRemove(containerIDMongoC, true, false, false)
-	if err != nil {
-		panic(err)
-	}
-
-	err = dockerSys.ContainerStopAndRemove(containerIDServer, true, false, false)
-	if err != nil {
-		panic(err)
-	}
-
-	err = dockerSys.ImageRemove(imageID, false, true)
-	if err != nil {
-		panic(err)
-	}
-
-	err = dockerSys.NetworkRemove(networkID)
-	if err != nil {
-		panic(err)
-	}
-
-	err = toolsGarbageCollector.ImageUnreferencedRemove()
-	if err != nil {
-		panic(err)
-	}
-
-	err = toolsGarbageCollector.VolumesUnreferencedRemove()
+	err = toolsGarbageCollector.RemoveAllByNameContains("delete")
 	if err != nil {
 		panic(err)
 	}

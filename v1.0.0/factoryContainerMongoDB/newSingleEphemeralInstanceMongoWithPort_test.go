@@ -17,9 +17,6 @@ func ExampleNewSingleEphemeralInstanceMongoWithPort() {
 	var err error
 	var newPort nat.Port
 	var pullStatusChannel = factoryDocker.NewImagePullStatusChannel()
-	var containerIDA string
-	var containerIDB string
-	var containerIDC string
 
 	go func(c chan iotmakerDocker.ContainerPullStatusSendToChannel) {
 
@@ -41,7 +38,7 @@ func ExampleNewSingleEphemeralInstanceMongoWithPort() {
 		panic(err)
 	}
 
-	err, containerIDA = NewSingleEphemeralInstanceMongoWithPort(
+	err, _ = NewSingleEphemeralInstanceMongoWithPort(
 		"container_a_delete_before_test",
 		newPort,
 		KMongoDBVersionTag_3,
@@ -56,7 +53,7 @@ func ExampleNewSingleEphemeralInstanceMongoWithPort() {
 		panic(err)
 	}
 
-	err, containerIDB = NewSingleEphemeralInstanceMongoWithPort(
+	err, _ = NewSingleEphemeralInstanceMongoWithPort(
 		"container_b_delete_before_test",
 		newPort,
 		KMongoDBVersionTag_3,
@@ -71,7 +68,7 @@ func ExampleNewSingleEphemeralInstanceMongoWithPort() {
 		panic(err)
 	}
 
-	err, containerIDC = NewSingleEphemeralInstanceMongoWithPort(
+	err, _ = NewSingleEphemeralInstanceMongoWithPort(
 		"container_c_delete_before_test",
 		newPort,
 		KMongoDBVersionTag_3,
@@ -109,34 +106,7 @@ func ExampleNewSingleEphemeralInstanceMongoWithPort() {
 
 	fmt.Println("ping ok")
 
-	// stop and remove a container
-	var dockerSys = iotmakerDocker.DockerSystem{}
-	err = dockerSys.Init()
-	if err != nil {
-		panic(err)
-	}
-
-	err = dockerSys.ContainerStopAndRemove(containerIDA, true, false, false)
-	if err != nil {
-		panic(err)
-	}
-
-	err = dockerSys.ContainerStopAndRemove(containerIDB, true, false, false)
-	if err != nil {
-		panic(err)
-	}
-
-	err = dockerSys.ContainerStopAndRemove(containerIDC, true, false, false)
-	if err != nil {
-		panic(err)
-	}
-
-	err = toolsGarbageCollector.ImageUnreferencedRemove()
-	if err != nil {
-		panic(err)
-	}
-
-	err = toolsGarbageCollector.VolumesUnreferencedRemove()
+	err = toolsGarbageCollector.RemoveAllByNameContains("delete")
 	if err != nil {
 		panic(err)
 	}

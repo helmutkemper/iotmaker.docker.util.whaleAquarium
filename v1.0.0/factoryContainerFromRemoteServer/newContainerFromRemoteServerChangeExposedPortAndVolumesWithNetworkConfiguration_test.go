@@ -5,6 +5,7 @@ import (
 	"github.com/docker/docker/api/types/mount"
 	"github.com/docker/go-connections/nat"
 	iotmakerDocker "github.com/helmutkemper/iotmaker.docker"
+	"github.com/helmutkemper/iotmaker.docker.util.whaleAquarium/v1.0.0/toolsGarbageCollector"
 	"github.com/helmutkemper/iotmaker.docker/factoryDocker"
 	"io/ioutil"
 	"net/http"
@@ -96,6 +97,11 @@ func ExampleNewContainerFromRemoteServerChangeExposedPortAndVolumesWithNetworkCo
 	}
 
 	err = resp.Body.Close()
+	if err != nil {
+		panic(err)
+	}
+
+	err = toolsGarbageCollector.RemoveAllByNameContains("delete")
 	if err != nil {
 		panic(err)
 	}

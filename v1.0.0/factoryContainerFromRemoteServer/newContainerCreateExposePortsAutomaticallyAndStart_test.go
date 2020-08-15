@@ -3,6 +3,7 @@ package factoryContainerFromRemoteServer
 import (
 	"fmt"
 	iotmakerDocker "github.com/helmutkemper/iotmaker.docker"
+	"github.com/helmutkemper/iotmaker.docker.util.whaleAquarium/v1.0.0/toolsGarbageCollector"
 	"github.com/helmutkemper/iotmaker.docker/factoryDocker"
 	"io/ioutil"
 	"net/http"
@@ -10,7 +11,7 @@ import (
 
 // Before run this example, you must create a file [windows: C:]/static/index.html and put
 // "It's alive!" inside file, without html tags and line breaks.
-func ExampleNewContainerFromRemoteServer() {
+func ExampleNewContainerCreateExposePortsAutomaticallyAndStart() {
 	var err error
 	var pullStatusChannel = factoryDocker.NewImagePullStatusChannel()
 
@@ -53,6 +54,11 @@ func ExampleNewContainerFromRemoteServer() {
 	}
 
 	err = resp.Body.Close()
+	if err != nil {
+		panic(err)
+	}
+
+	err = toolsGarbageCollector.RemoveAllByNameContains("delete")
 	if err != nil {
 		panic(err)
 	}

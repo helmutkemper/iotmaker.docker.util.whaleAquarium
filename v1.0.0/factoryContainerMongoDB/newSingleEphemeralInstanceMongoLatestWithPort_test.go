@@ -17,9 +17,6 @@ func ExampleNewSingleEphemeralInstanceMongoLatestWithPort() {
 	var err error
 	var newPort nat.Port
 	var pullStatusChannel = factoryDocker.NewImagePullStatusChannel()
-	var containerID_a string
-	var containerID_b string
-	var containerID_c string
 
 	go func(c chan iotmakerDocker.ContainerPullStatusSendToChannel) {
 
@@ -41,7 +38,7 @@ func ExampleNewSingleEphemeralInstanceMongoLatestWithPort() {
 		panic(err)
 	}
 
-	err, containerID_a = NewSingleEphemeralInstanceMongoLatestWithPort(
+	err, _ = NewSingleEphemeralInstanceMongoLatestWithPort(
 		"container_a_delete_before_test",
 		newPort,
 		pullStatusChannel,
@@ -55,7 +52,7 @@ func ExampleNewSingleEphemeralInstanceMongoLatestWithPort() {
 		panic(err)
 	}
 
-	err, containerID_b = NewSingleEphemeralInstanceMongoLatestWithPort(
+	err, _ = NewSingleEphemeralInstanceMongoLatestWithPort(
 		"container_b_delete_before_test",
 		newPort,
 		pullStatusChannel,
@@ -69,7 +66,7 @@ func ExampleNewSingleEphemeralInstanceMongoLatestWithPort() {
 		panic(err)
 	}
 
-	err, containerID_c = NewSingleEphemeralInstanceMongoLatestWithPort(
+	err, _ = NewSingleEphemeralInstanceMongoLatestWithPort(
 		"container_c_delete_before_test",
 		newPort,
 		pullStatusChannel,
@@ -105,34 +102,7 @@ func ExampleNewSingleEphemeralInstanceMongoLatestWithPort() {
 
 	fmt.Println("ping ok")
 
-	// stop and remove a container
-	var dockerSys = iotmakerDocker.DockerSystem{}
-	err = dockerSys.Init()
-	if err != nil {
-		panic(err)
-	}
-
-	err = dockerSys.ContainerStopAndRemove(containerID_a, true, false, false)
-	if err != nil {
-		panic(err)
-	}
-
-	err = dockerSys.ContainerStopAndRemove(containerID_b, true, false, false)
-	if err != nil {
-		panic(err)
-	}
-
-	err = dockerSys.ContainerStopAndRemove(containerID_c, true, false, false)
-	if err != nil {
-		panic(err)
-	}
-
-	err = toolsGarbageCollector.ImageUnreferencedRemove()
-	if err != nil {
-		panic(err)
-	}
-
-	err = toolsGarbageCollector.VolumesUnreferencedRemove()
+	err = toolsGarbageCollector.RemoveAllByNameContains("delete")
 	if err != nil {
 		panic(err)
 	}

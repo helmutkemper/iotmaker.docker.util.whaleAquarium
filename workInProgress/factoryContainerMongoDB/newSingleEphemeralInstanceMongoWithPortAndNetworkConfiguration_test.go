@@ -1,15 +1,11 @@
 package factoryContainerMongoDB
 
 import (
-	"context"
-	"fmt"
 	"github.com/docker/go-connections/nat"
 	iotmakerDocker "github.com/helmutkemper/iotmaker.docker"
+	"github.com/helmutkemper/iotmaker.docker.util.whaleAquarium/v1.0.0/factoryContainerFromRemoteServer"
+	"github.com/helmutkemper/iotmaker.docker.util.whaleAquarium/v1.0.0/toolsGarbageCollector"
 	"github.com/helmutkemper/iotmaker.docker/factoryDocker"
-	"go.mongodb.org/mongo-driver/mongo"
-	"go.mongodb.org/mongo-driver/mongo/options"
-	"go.mongodb.org/mongo-driver/mongo/readpref"
-	"time"
 )
 
 func ExampleNewSingleEphemeralInstanceMongoWithPortAndNetworkConfiguration() {
@@ -26,7 +22,7 @@ func ExampleNewSingleEphemeralInstanceMongoWithPortAndNetworkConfiguration() {
 				//fmt.Printf("image pull status: %+v\n", status)
 
 				if status.Closed == true {
-					fmt.Println("image pull complete!")
+					//fmt.Println("image pull complete!")
 				}
 			}
 		}
@@ -40,7 +36,7 @@ func ExampleNewSingleEphemeralInstanceMongoWithPortAndNetworkConfiguration() {
 		panic(err)
 	}
 
-	newPort, err = nat.NewPort("tcp", "27017")
+	newPort, err = nat.NewPort("tcp", "27016")
 	if err != nil {
 		panic(err)
 	}
@@ -74,7 +70,7 @@ func ExampleNewSingleEphemeralInstanceMongoWithPortAndNetworkConfiguration() {
 		panic(err)
 	}
 
-	newPort, err = nat.NewPort("tcp", "27017")
+	newPort, err = nat.NewPort("tcp", "27018")
 	if err != nil {
 		panic(err)
 	}
@@ -91,37 +87,30 @@ func ExampleNewSingleEphemeralInstanceMongoWithPortAndNetworkConfiguration() {
 		panic(err)
 	}
 
-	var mongoClient *mongo.Client
-	var ctx context.Context
-	mongoClient, err = mongo.NewClient(
-		options.Client().ApplyURI(
-			"mongodb://" +
-				"10.0.0.1:27017," +
-				"10.0.0.2:27017," +
-				"10.0.0.3:27017",
-		),
+	err, _, _, _ = factoryContainerFromRemoteServer.NewContainerFromRemoteServerWithNetworkConfiguration(
+		"image_server_delete_before_test:latest",
+		"cont_server_delete_before_test",
+		iotmakerDocker.KRestartPolicyUnlessStopped,
+		networkAutoConfiguration,
+		"https://github.com/helmutkemper/iotmaker.docker.util.whaleAquarium.mongodb.test.git",
+		[]string{},
+		pullStatusChannel,
 	)
-	if err != nil {
+	if err != nil && err.Error() != "there is a network with this name" {
 		panic(err)
 	}
 
-	ctx, _ = context.WithTimeout(context.Background(), 60*time.Second)
-	err = mongoClient.Connect(ctx)
+	verifyServer("http://127.0.0.1:8080/?db=10.0.0.2:27016")
+	verifyServer("http://127.0.0.1:8080/?db=10.0.0.3:27017")
+	verifyServer("http://127.0.0.1:8080/?db=10.0.0.4:27018")
+
+	err = toolsGarbageCollector.RemoveAllByNameContains("delete")
 	if err != nil {
 		panic(err)
 	}
-
-	ctx, _ = context.WithTimeout(context.Background(), 60*time.Second)
-	err = mongoClient.Ping(ctx, readpref.Primary())
-	if err != nil {
-		panic(err)
-	}
-
-	fmt.Println("ping ok")
 
 	// Output:
-	// image pull complete!
-	// image pull complete!
-	// image pull complete!
-	// ping ok
+	// map[error: ok:true]
+	// map[error: ok:true]
+	// map[error: ok:true]
 }

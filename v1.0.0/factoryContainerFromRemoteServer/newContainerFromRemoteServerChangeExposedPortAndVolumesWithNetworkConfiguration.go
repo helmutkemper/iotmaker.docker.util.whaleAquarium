@@ -7,6 +7,12 @@ import (
 	iotmakerdocker "github.com/helmutkemper/iotmaker.docker/v1.0.0"
 )
 
+// NewContainerFromRemoteServerChangeExposedPortAndVolumesWithNetworkConfiguration
+// (English): Create a image and create and start a container from project inside into
+// server
+//
+// NewContainerFromRemoteServerChangeExposedPortAndVolumesWithNetworkConfiguration
+// (Português): Cria uma imagem e inicializa o container baseado no conteúdo do servidor
 func NewContainerFromRemoteServerChangeExposedPortAndVolumesWithNetworkConfiguration(
 	newImageName,
 	newContainerName string,

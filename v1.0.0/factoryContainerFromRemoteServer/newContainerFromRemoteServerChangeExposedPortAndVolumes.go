@@ -6,8 +6,11 @@ import (
 	iotmakerdocker "github.com/helmutkemper/iotmaker.docker/v1.0.0"
 )
 
-// English: Create a image and create and start a container from project inside into server
-// Warning: work in progress - buildStatus don't work yet
+// NewContainerFromRemoteServerChangeExposedPortAndVolumes (English): Create a image and
+// create and start a container from project inside into server
+//
+// NewContainerFromRemoteServerChangeExposedPortAndVolumes (Português): Cria uma imagem e
+// inicializa o container baseado no conteúdo do servidor
 func NewContainerFromRemoteServerChangeExposedPortAndVolumes(
 	newImageName,
 	newContainerName,

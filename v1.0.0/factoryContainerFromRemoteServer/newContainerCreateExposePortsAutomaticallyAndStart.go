@@ -5,7 +5,11 @@ import (
 	iotmakerdocker "github.com/helmutkemper/iotmaker.docker/v1.0.0"
 )
 
-// English: Create a image and create and start a container from project inside into server
+// NewContainerCreateExposePortsAutomaticallyAndStart (English): Create a image and
+// create and start a container from project inside into server
+//
+// NewContainerCreateExposePortsAutomaticallyAndStart (Português): Cria uma imagem e
+// inicializa o container baseado no conteúdo do servidor
 func NewContainerCreateExposePortsAutomaticallyAndStart(
 	newImageName,
 	newContainerName,

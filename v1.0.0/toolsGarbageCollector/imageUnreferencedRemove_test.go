@@ -22,6 +22,9 @@ func ExampleImageUnreferencedRemove() {
 	}
 
 	list, err = dockerSys.ImageList()
+	if err != nil {
+		panic(err)
+	}
 	for _, image := range list {
 		if len(image.RepoTags) > 0 {
 			if image.RepoTags[0] == "<none>:<none>" {

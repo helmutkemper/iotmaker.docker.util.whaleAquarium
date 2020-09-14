@@ -18,6 +18,10 @@ func ExampleVolumesUnreferencedRemove() {
 	}
 
 	volumes, err = dockerSys.VolumeList()
+	if err != nil {
+		panic(err)
+	}
+
 	for _, volumeData := range volumes {
 		if volumeData.UsageData == nil || volumeData.UsageData.RefCount == -1 {
 			counterUnreferencedVolumes += 1
@@ -35,6 +39,10 @@ func ExampleVolumesUnreferencedRemove() {
 
 	counterUnreferencedVolumes = 0
 	volumes, err = dockerSys.VolumeList()
+	if err != nil {
+		panic(err)
+	}
+
 	for _, volumeData := range volumes {
 		if volumeData.UsageData == nil || volumeData.UsageData.RefCount == -1 {
 			counterUnreferencedVolumes += 1

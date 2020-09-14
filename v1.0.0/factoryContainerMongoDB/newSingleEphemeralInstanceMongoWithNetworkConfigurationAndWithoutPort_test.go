@@ -1,61 +1,43 @@
 package factoryContainerMongoDB
 
 import (
-	"bytes"
 	"encoding/json"
 	"fmt"
-	iotmakerDocker "github.com/helmutkemper/iotmaker.docker"
 	"github.com/helmutkemper/iotmaker.docker.util.whaleAquarium/v1.0.0/factoryContainerFromRemoteServer"
 	"github.com/helmutkemper/iotmaker.docker.util.whaleAquarium/v1.0.0/toolsGarbageCollector"
-	"github.com/helmutkemper/iotmaker.docker/factoryDocker"
+	iotmakerdocker "github.com/helmutkemper/iotmaker.docker/v1.0.0"
 	"io/ioutil"
 	"log"
 	"net/http"
-	"os"
 )
-
-func toFile(logLine []byte) {
-	var err error
-	var f *os.File
-	f, err = os.OpenFile("access.log", os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
-	if err != nil {
-		panic(err)
-	}
-
-	if bytes.HasSuffix(logLine, []byte("\n")) == false {
-		logLine = append(logLine, []byte("\n")...)
-	}
-	if _, err := f.Write(logLine); err != nil {
-		_ = f.Close() // ignore error; Write error takes precedence
-		panic(err)
-	}
-	if err := f.Close(); err != nil {
-		panic(err)
-	}
-}
 
 func ExampleNewSingleEphemeralInstanceMongoWithNetworkConfigurationAndWithoutPort() {
 	var err error
-	var pullStatusChannel = factoryDocker.NewImagePullStatusChannel()
-	var networkAutoConfiguration *iotmakerDocker.NextNetworkAutoConfiguration
+	var pullStatusChannel = iotmakerdocker.NewImagePullStatusChannel()
+	var networkAutoConfiguration *iotmakerdocker.NextNetworkAutoConfiguration
 
-	go func(c chan iotmakerDocker.ContainerPullStatusSendToChannel) {
+	go func(c chan iotmakerdocker.ContainerPullStatusSendToChannel) {
 
 		for {
 			select {
 			case status := <-c:
 				//fmt.Printf("image pull status: %+v\n", status)
 
-				toFile([]byte(status.Stream))
 				if status.Closed == true {
-					fmt.Println("image pull complete!")
+					//fmt.Println("image pull complete!")
 				}
 			}
 		}
 
 	}(*pullStatusChannel)
 
-	err, _, networkAutoConfiguration = factoryDocker.NewNetwork(
+	// stop and remove containers and garbage collector
+	err = toolsGarbageCollector.RemoveAllByNameContains("delete")
+	if err != nil {
+		panic(err)
+	}
+
+	_, networkAutoConfiguration, err = iotmakerdocker.NewNetwork(
 		"network_delete_before_test",
 	)
 	if err != nil {
@@ -65,7 +47,7 @@ func ExampleNewSingleEphemeralInstanceMongoWithNetworkConfigurationAndWithoutPor
 	// address: 10.0.0.2
 	err, _, _ = NewSingleEphemeralInstanceMongoWithNetworkConfigurationAndWithoutPort(
 		"container_a_delete_before_test",
-		iotmakerDocker.KRestartPolicyOnFailure,
+		iotmakerdocker.KRestartPolicyOnFailure,
 		networkAutoConfiguration,
 		KMongoDBVersionTag_3,
 		pullStatusChannel,
@@ -77,7 +59,7 @@ func ExampleNewSingleEphemeralInstanceMongoWithNetworkConfigurationAndWithoutPor
 	// address: 10.0.0.3
 	err, _, _ = NewSingleEphemeralInstanceMongoWithNetworkConfigurationAndWithoutPort(
 		"container_b_delete_before_test",
-		iotmakerDocker.KRestartPolicyOnFailure,
+		iotmakerdocker.KRestartPolicyOnFailure,
 		networkAutoConfiguration,
 		KMongoDBVersionTag_3,
 		pullStatusChannel,
@@ -89,7 +71,7 @@ func ExampleNewSingleEphemeralInstanceMongoWithNetworkConfigurationAndWithoutPor
 	// address: 10.0.0.4
 	err, _, _ = NewSingleEphemeralInstanceMongoWithNetworkConfigurationAndWithoutPort(
 		"container_c_delete_before_test",
-		iotmakerDocker.KRestartPolicyOnFailure,
+		iotmakerdocker.KRestartPolicyOnFailure,
 		networkAutoConfiguration,
 		KMongoDBVersionTag_3,
 		pullStatusChannel,
@@ -102,7 +84,7 @@ func ExampleNewSingleEphemeralInstanceMongoWithNetworkConfigurationAndWithoutPor
 	err, _, _, _ = factoryContainerFromRemoteServer.NewContainerFromRemoteServerWithNetworkConfiguration(
 		"image_server_delete_before_test:latest",
 		"cont_server_delete_before_test",
-		iotmakerDocker.KRestartPolicyUnlessStopped,
+		iotmakerdocker.KRestartPolicyUnlessStopped,
 		networkAutoConfiguration,
 		"https://github.com/helmutkemper/iotmaker.docker.util.whaleAquarium.mongodb.test.git",
 		[]string{},
@@ -116,14 +98,13 @@ func ExampleNewSingleEphemeralInstanceMongoWithNetworkConfigurationAndWithoutPor
 	verifyServer("http://127.0.0.1:8080/?db=10.0.0.3:27017")
 	verifyServer("http://127.0.0.1:8080/?db=10.0.0.4:27017")
 
-	// stop and remove a container
+	// stop and remove containers and garbage collector
 	err = toolsGarbageCollector.RemoveAllByNameContains("delete")
 	if err != nil {
 		panic(err)
 	}
 
 	// Output:
-	// image pull complete!
 	// map[error: ok:true]
 	// map[error: ok:true]
 	// map[error: ok:true]

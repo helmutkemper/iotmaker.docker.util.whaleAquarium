@@ -4,18 +4,18 @@ import (
 	"github.com/docker/docker/api/types/mount"
 	"github.com/docker/docker/api/types/network"
 	"github.com/docker/go-connections/nat"
-	iotmakerDocker "github.com/helmutkemper/iotmaker.docker"
+	iotmakerdocker "github.com/helmutkemper/iotmaker.docker/v1.0.0"
 )
 
 func NewRabbitMQLatest(
 	containerName string,
-	containerRestartPolicy iotmakerDocker.RestartPolicy,
-	networkAutoConfiguration *iotmakerDocker.NextNetworkAutoConfiguration,
+	containerRestartPolicy iotmakerdocker.RestartPolicy,
+	networkAutoConfiguration *iotmakerdocker.NextNetworkAutoConfiguration,
 	portHttpAPI nat.Port,
 	portAMPQ nat.Port,
 	portInterNodeAndCli nat.Port,
 	version RabbitMQVersionTag,
-	pullStatus *chan iotmakerDocker.ContainerPullStatusSendToChannel,
+	pullStatus *chan iotmakerdocker.ContainerPullStatusSendToChannel,
 ) (err error, containerId, networkId string) {
 
 	var mountList []mount.Mount
@@ -30,28 +30,38 @@ func NewRabbitMQLatest(
 	currentPortInterNodeAndCli, err = nat.NewPort("tcp", "25676")
 
 	// init docker
-	var dockerSys = iotmakerDocker.DockerSystem{}
+	var dockerSys = iotmakerdocker.DockerSystem{}
 	err = dockerSys.Init()
 	if err != nil {
 		return
 	}
 
 	// image pull and wait
-	err, _, _ = dockerSys.ImagePull(imageName, pullStatus)
+	_, _, err = dockerSys.ImagePull(imageName, pullStatus)
 	if err != nil {
 		return
 	}
 
-	currentPortList := []nat.Port{
-		currentPortHttpAPI,
-		currentPortAMPQ,
-		currentPortInterNodeAndCli,
-	}
-
-	newPortList := []nat.Port{
-		portHttpAPI,
-		portAMPQ,
-		portInterNodeAndCli,
+	newPortMap := nat.PortMap{
+		// container port number/protocol [tpc/udp]
+		currentPortHttpAPI: []nat.PortBinding{ // server original port
+			{
+				// server output port number
+				HostPort: currentPortHttpAPI.Port(),
+			},
+		},
+		currentPortAMPQ: []nat.PortBinding{ // server original port
+			{
+				// server output port number
+				HostPort: currentPortAMPQ.Port(),
+			},
+		},
+		currentPortInterNodeAndCli: []nat.PortBinding{ // server original port
+			{
+				// server output port number
+				HostPort: currentPortInterNodeAndCli.Port(),
+			},
+		},
 	}
 
 	err, networkConfig = networkAutoConfiguration.GetNext()
@@ -59,14 +69,13 @@ func NewRabbitMQLatest(
 		return
 	}
 
-	err, containerId = dockerSys.ContainerCreateChangeExposedPortAndStart(
+	containerId, err = dockerSys.ContainerCreateAndStart(
 		imageName,
 		containerName,
 		containerRestartPolicy,
+		newPortMap,
 		mountList,
 		networkConfig,
-		currentPortList,
-		newPortList,
 	)
 
 	return

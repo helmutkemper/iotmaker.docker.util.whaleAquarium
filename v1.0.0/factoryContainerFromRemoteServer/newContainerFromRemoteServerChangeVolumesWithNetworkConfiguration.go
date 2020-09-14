@@ -3,30 +3,35 @@ package factoryContainerFromRemoteServer
 import (
 	"github.com/docker/docker/api/types/mount"
 	"github.com/docker/docker/api/types/network"
-	iotmakerDocker "github.com/helmutkemper/iotmaker.docker"
+	iotmakerdocker "github.com/helmutkemper/iotmaker.docker/v1.0.0"
 )
 
 func NewContainerFromRemoteServerChangeVolumesWithNetworkConfiguration(
 	newImageName,
 	newContainerName string,
-	newContainerRestartPolicy iotmakerDocker.RestartPolicy,
-	networkAutoConfiguration *iotmakerDocker.NextNetworkAutoConfiguration,
+	newContainerRestartPolicy iotmakerdocker.RestartPolicy,
+	networkAutoConfiguration *iotmakerdocker.NextNetworkAutoConfiguration,
 	serverPath string,
 	imageTags []string,
 	containersVolumes []mount.Mount,
-	buildStatus *chan iotmakerDocker.ContainerPullStatusSendToChannel,
-) (err error, imageId, containerId, networkId string) {
+	buildStatus *chan iotmakerdocker.ContainerPullStatusSendToChannel,
+) (
+	imageId,
+	containerId,
+	networkId string,
+	err error,
+) {
 
 	var networkConfig *network.NetworkingConfig
 
 	// init docker
-	var dockerSys = iotmakerDocker.DockerSystem{}
+	var dockerSys = iotmakerdocker.DockerSystem{}
 	err = dockerSys.Init()
 	if err != nil {
 		return
 	}
 
-	err = dockerSys.ImageBuildFromRemoteServer(serverPath, newImageName, imageTags, buildStatus)
+	_, err = dockerSys.ImageBuildFromRemoteServer(serverPath, newImageName, imageTags, buildStatus)
 	if err != nil {
 		return
 	}
@@ -36,7 +41,7 @@ func NewContainerFromRemoteServerChangeVolumesWithNetworkConfiguration(
 		return
 	}
 
-	err, containerId = dockerSys.ContainerCreateExposePortsAutomaticallyAndStart(
+	containerId, err = dockerSys.ContainerCreateExposePortsAutomaticallyAndStart(
 		newImageName,
 		newContainerName,
 		newContainerRestartPolicy,

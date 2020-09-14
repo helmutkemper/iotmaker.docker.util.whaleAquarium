@@ -3,43 +3,42 @@ package factoryContainerFromRemoteServer
 import (
 	"github.com/docker/docker/api/types/mount"
 	"github.com/docker/docker/api/types/network"
-	iotmakerDocker "github.com/helmutkemper/iotmaker.docker"
-	"github.com/helmutkemper/iotmaker.docker/factoryDocker"
+	iotmakerdocker "github.com/helmutkemper/iotmaker.docker/v1.0.0"
 )
 
 func NewContainerFromRemoteServerWithNetworkConfiguration(
 	newImageName,
 	newContainerName string,
-	newContainerRestartPolicy iotmakerDocker.RestartPolicy,
-	networkAutoConfiguration *iotmakerDocker.NextNetworkAutoConfiguration,
+	newContainerRestartPolicy iotmakerdocker.RestartPolicy,
+	networkAutoConfiguration *iotmakerdocker.NextNetworkAutoConfiguration,
 	serverPath string,
 	imageTags []string,
-	buildStatus *chan iotmakerDocker.ContainerPullStatusSendToChannel,
+	buildStatus *chan iotmakerdocker.ContainerPullStatusSendToChannel,
 ) (err error, imageId, containerId, networkId string) {
 
 	var containersVolumes []mount.Mount
 	var imageVolumesList []string
-	var containersVolumeTmpList = make([]iotmakerDocker.Mount, 0)
+	var containersVolumeTmpList = make([]iotmakerdocker.Mount, 0)
 	var networkConfig *network.NetworkingConfig
 
 	// init docker
-	var dockerSys = iotmakerDocker.DockerSystem{}
+	var dockerSys = iotmakerdocker.DockerSystem{}
 	err = dockerSys.Init()
 	if err != nil {
 		return
 	}
 
-	err = dockerSys.ImageBuildFromRemoteServer(serverPath, newImageName, imageTags, buildStatus)
+	_, err = dockerSys.ImageBuildFromRemoteServer(serverPath, newImageName, imageTags, buildStatus)
 	if err != nil {
 		return
 	}
 
-	err, imageId = dockerSys.ImageFindIdByName(newImageName)
+	imageId, err = dockerSys.ImageFindIdByName(newImageName)
 	if err != nil {
 		return
 	}
 
-	err, imageVolumesList = dockerSys.ImageListExposedVolumesByName(newImageName)
+	imageVolumesList, err = dockerSys.ImageListExposedVolumesByName(newImageName)
 	if err != nil {
 		return
 	}
@@ -47,15 +46,15 @@ func NewContainerFromRemoteServerWithNetworkConfiguration(
 	for _, volumePathInsideImage := range imageVolumesList {
 		containersVolumeTmpList = append(
 			containersVolumeTmpList,
-			iotmakerDocker.Mount{
-				MountType:   iotmakerDocker.KVolumeMountTypeBind,
+			iotmakerdocker.Mount{
+				MountType:   iotmakerdocker.KVolumeMountTypeBind,
 				Source:      volumePathInsideImage,
 				Destination: volumePathInsideImage,
 			},
 		)
 	}
 
-	err, containersVolumes = factoryDocker.NewVolumeMount(containersVolumeTmpList)
+	containersVolumes, err = iotmakerdocker.NewVolumeMount(containersVolumeTmpList)
 	if err != nil {
 		return
 	}
@@ -65,7 +64,7 @@ func NewContainerFromRemoteServerWithNetworkConfiguration(
 		return
 	}
 
-	err, containerId = dockerSys.ContainerCreateExposePortsAutomaticallyAndStart(
+	containerId, err = dockerSys.ContainerCreateExposePortsAutomaticallyAndStart(
 		newImageName,
 		newContainerName,
 		newContainerRestartPolicy,

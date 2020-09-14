@@ -4,8 +4,7 @@ import (
 	"github.com/docker/docker/api/types/mount"
 	"github.com/docker/docker/api/types/network"
 	"github.com/helmutkemper/iotmaker.db.mongodb.config/factoryMongoDBConfig"
-	iotmakerDocker "github.com/helmutkemper/iotmaker.docker"
-	"github.com/helmutkemper/iotmaker.docker/factoryDocker"
+	iotmakerdocker "github.com/helmutkemper/iotmaker.docker/v1.0.0"
 	"io/ioutil"
 	"os"
 )
@@ -13,9 +12,9 @@ import (
 func newMongoEphemeralWithNetworkConfigurationAndWithoutPort(
 	imageName,
 	containerName string,
-	containerRestartPolicy iotmakerDocker.RestartPolicy,
-	networkAutoConfiguration *iotmakerDocker.NextNetworkAutoConfiguration,
-	pullStatus *chan iotmakerDocker.ContainerPullStatusSendToChannel,
+	containerRestartPolicy iotmakerdocker.RestartPolicy,
+	networkAutoConfiguration *iotmakerdocker.NextNetworkAutoConfiguration,
+	pullStatus *chan iotmakerdocker.ContainerPullStatusSendToChannel,
 ) (err error, containerId, networkId string) {
 
 	var file []byte
@@ -38,7 +37,7 @@ func newMongoEphemeralWithNetworkConfigurationAndWithoutPort(
 	}
 
 	// init docker
-	var dockerSys = iotmakerDocker.DockerSystem{}
+	var dockerSys = iotmakerdocker.DockerSystem{}
 	err = dockerSys.Init()
 	if err != nil {
 		return
@@ -50,16 +49,16 @@ func newMongoEphemeralWithNetworkConfigurationAndWithoutPort(
 	}
 
 	// image pull and wait
-	err, _, _ = dockerSys.ImagePull(imageName, pullStatus)
+	_, _, err = dockerSys.ImagePull(imageName, pullStatus)
 	if err != nil {
 		return
 	}
 
 	// define an external MongoDB config file path
-	err, mountList = factoryDocker.NewVolumeMount(
-		[]iotmakerDocker.Mount{
+	mountList, err = iotmakerdocker.NewVolumeMount(
+		[]iotmakerdocker.Mount{
 			{
-				MountType:   iotmakerDocker.KVolumeMountTypeBind,
+				MountType:   iotmakerdocker.KVolumeMountTypeBind,
 				Source:      relativeConfigFilePathToSave,
 				Destination: "/etc/mongo.conf",
 			},
@@ -69,10 +68,11 @@ func newMongoEphemeralWithNetworkConfigurationAndWithoutPort(
 		return
 	}
 
-	err, containerId = dockerSys.ContainerCreateWithoutExposePortsAndStart(
+	containerId, err = dockerSys.ContainerCreateAndStart(
 		imageName,
 		containerName,
 		containerRestartPolicy,
+		nil,
 		mountList,
 		networkConfig,
 	)

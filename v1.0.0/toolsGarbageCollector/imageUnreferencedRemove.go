@@ -1,11 +1,9 @@
 package toolsGarbageCollector
 
-import (
-	iotmakerDocker "github.com/helmutkemper/iotmaker.docker"
-)
+import iotmakerdocker "github.com/helmutkemper/iotmaker.docker/v1.0.0"
 
 func ImageUnreferencedRemove() (err error) {
-	var dockerSys = iotmakerDocker.DockerSystem{}
+	var dockerSys = iotmakerdocker.DockerSystem{}
 	err = dockerSys.Init()
 	if err != nil {
 		return

@@ -4,8 +4,8 @@ import (
 	"errors"
 	"fmt"
 	"github.com/hashicorp/vault/api"
-	iotmakerDocker "github.com/helmutkemper/iotmaker.docker"
-	"github.com/helmutkemper/iotmaker.docker/factoryDocker"
+	"github.com/helmutkemper/iotmaker.docker.util.whaleAquarium/v1.0.0/toolsGarbageCollector"
+	iotmakerdocker "github.com/helmutkemper/iotmaker.docker/v1.0.0"
 	"net/http"
 	"time"
 )
@@ -21,9 +21,9 @@ func ExampleNewVaultInDevelopmentMode() {
 	var vaultRootToken string
 	var vaultUnsealKey string
 
-	var pullStatusChannel = factoryDocker.NewImagePullStatusChannel()
+	var pullStatusChannel = iotmakerdocker.NewImagePullStatusChannel()
 
-	go func(c chan iotmakerDocker.ContainerPullStatusSendToChannel) {
+	go func(c chan iotmakerdocker.ContainerPullStatusSendToChannel) {
 
 		for {
 			select {
@@ -31,12 +31,17 @@ func ExampleNewVaultInDevelopmentMode() {
 				//fmt.Printf("image pull status: %+v\n", status.Stream)
 
 				if status.Closed == true {
-					fmt.Println("image pull complete!")
+					//fmt.Println("image pull complete!")
 				}
 			}
 		}
 
 	}(*pullStatusChannel)
+
+	err = toolsGarbageCollector.RemoveAllByNameContains("vaultContainer")
+	if err != nil {
+		panic(err)
+	}
 
 	err, containerID, ApiAddress, ClusterAddress, vaultRootToken, vaultUnsealKey = NewVaultInDevelopmentMode(
 		"vaultContainer",
@@ -87,7 +92,7 @@ func ExampleNewVaultInDevelopmentMode() {
 	}
 
 	// stop and remove a container
-	var dockerSys = iotmakerDocker.DockerSystem{}
+	var dockerSys = iotmakerdocker.DockerSystem{}
 	err = dockerSys.Init()
 	if err != nil {
 		panic(err)
@@ -98,7 +103,11 @@ func ExampleNewVaultInDevelopmentMode() {
 		panic(err)
 	}
 
+	err = toolsGarbageCollector.RemoveAllByNameContains("vaultContainer")
+	if err != nil {
+		panic(err)
+	}
+
 	// Output:
-	// image pull complete!
 	// vault data: map[your_key:please understand: put your data inside the "data" key or the vault will return the error >>no data provided<<]
 }

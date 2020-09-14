@@ -4,9 +4,8 @@ import (
 	"fmt"
 	"github.com/docker/docker/api/types/mount"
 	"github.com/docker/go-connections/nat"
-	iotmakerDocker "github.com/helmutkemper/iotmaker.docker"
 	"github.com/helmutkemper/iotmaker.docker.util.whaleAquarium/v1.0.0/toolsGarbageCollector"
-	"github.com/helmutkemper/iotmaker.docker/factoryDocker"
+	iotmakerdocker "github.com/helmutkemper/iotmaker.docker/v1.0.0"
 	"io/ioutil"
 	"net/http"
 )
@@ -15,10 +14,10 @@ import (
 // "It's alive!" inside file, without html tags and line breaks.
 func ExampleNewContainerFromRemoteServerChangeExposedPortAndVolumes() {
 	var err error
-	var pullStatusChannel = factoryDocker.NewImagePullStatusChannel()
+	var pullStatusChannel = iotmakerdocker.NewImagePullStatusChannel()
 	var volumesList []mount.Mount
 
-	go func(c chan iotmakerDocker.ContainerPullStatusSendToChannel) {
+	go func(c chan iotmakerdocker.ContainerPullStatusSendToChannel) {
 
 		for {
 			select {
@@ -26,35 +25,32 @@ func ExampleNewContainerFromRemoteServerChangeExposedPortAndVolumes() {
 				//fmt.Printf("image pull status: %+v\n", status)
 
 				if status.Closed == true {
-					fmt.Println("image pull complete!")
+					//fmt.Println("image pull complete!")
 				}
 			}
 		}
 
 	}(*pullStatusChannel)
 
-	currentPort, err := nat.NewPort("tcp", "3000")
+	err = toolsGarbageCollector.RemoveAllByNameContains("delete")
 	if err != nil {
 		panic(err)
 	}
 
-	newPort, err := nat.NewPort("tcp", "8080")
-	if err != nil {
-		panic(err)
-	}
-
-	currentPortList := []nat.Port{
-		currentPort,
-	}
-
-	newPortList := []nat.Port{
-		newPort,
-	}
-
-	err, volumesList = factoryDocker.NewVolumeMount(
-		[]iotmakerDocker.Mount{
+	serverPort := nat.PortMap{
+		// container port number/protocol [tpc/udp]
+		"3000/tcp": []nat.PortBinding{ // server original port
 			{
-				MountType:   iotmakerDocker.KVolumeMountTypeBind,
+				// server output port number
+				HostPort: "8080",
+			},
+		},
+	}
+
+	volumesList, err = iotmakerdocker.NewVolumeMount(
+		[]iotmakerdocker.Mount{
+			{
+				MountType:   iotmakerdocker.KVolumeMountTypeBind,
 				Source:      "C:\\static", //absolute or relative to this code
 				Destination: "/static",    //folder inside container
 			},
@@ -69,8 +65,7 @@ func ExampleNewContainerFromRemoteServerChangeExposedPortAndVolumes() {
 		"container_delete_before_test",
 		"https://github.com/helmutkemper/iotmaker.docker.util.whaleAquarium.sample.git",
 		[]string{},
-		currentPortList,
-		newPortList,
+		serverPort,
 		volumesList,
 		pullStatusChannel,
 	)
@@ -102,6 +97,5 @@ func ExampleNewContainerFromRemoteServerChangeExposedPortAndVolumes() {
 
 	fmt.Printf("%s\n", site)
 	// Output:
-	// image pull complete!
 	// It's alive!
 }

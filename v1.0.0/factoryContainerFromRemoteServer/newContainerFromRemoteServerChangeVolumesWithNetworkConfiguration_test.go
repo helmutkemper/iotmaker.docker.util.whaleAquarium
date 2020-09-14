@@ -3,20 +3,19 @@ package factoryContainerFromRemoteServer
 import (
 	"fmt"
 	"github.com/docker/docker/api/types/mount"
-	iotmakerDocker "github.com/helmutkemper/iotmaker.docker"
 	"github.com/helmutkemper/iotmaker.docker.util.whaleAquarium/v1.0.0/toolsGarbageCollector"
-	"github.com/helmutkemper/iotmaker.docker/factoryDocker"
+	iotmakerdocker "github.com/helmutkemper/iotmaker.docker/v1.0.0"
 	"io/ioutil"
 	"net/http"
 )
 
 func ExampleNewContainerFromRemoteServerChangeVolumesWithNetworkConfiguration() {
 	var err error
-	var pullStatusChannel = factoryDocker.NewImagePullStatusChannel()
+	var pullStatusChannel = iotmakerdocker.NewImagePullStatusChannel()
 	var volumesList []mount.Mount
-	var networkAutoConfiguration *iotmakerDocker.NextNetworkAutoConfiguration
+	var networkAutoConfiguration *iotmakerdocker.NextNetworkAutoConfiguration
 
-	go func(c chan iotmakerDocker.ContainerPullStatusSendToChannel) {
+	go func(c chan iotmakerdocker.ContainerPullStatusSendToChannel) {
 
 		for {
 			select {
@@ -24,17 +23,22 @@ func ExampleNewContainerFromRemoteServerChangeVolumesWithNetworkConfiguration() 
 				//fmt.Printf("image pull status: %+v\n", status)
 
 				if status.Closed == true {
-					fmt.Println("image pull complete!")
+					//fmt.Println("image pull complete!")
 				}
 			}
 		}
 
 	}(*pullStatusChannel)
 
-	err, volumesList = factoryDocker.NewVolumeMount(
-		[]iotmakerDocker.Mount{
+	err = toolsGarbageCollector.RemoveAllByNameContains("delete")
+	if err != nil {
+		panic(err)
+	}
+
+	volumesList, err = iotmakerdocker.NewVolumeMount(
+		[]iotmakerdocker.Mount{
 			{
-				MountType:   iotmakerDocker.KVolumeMountTypeBind,
+				MountType:   iotmakerdocker.KVolumeMountTypeBind,
 				Source:      "C:\\static", //absolute or relative to this code
 				Destination: "/static",    //folder inside container
 			},
@@ -44,15 +48,15 @@ func ExampleNewContainerFromRemoteServerChangeVolumesWithNetworkConfiguration() 
 		panic(err)
 	}
 
-	err, _, networkAutoConfiguration = factoryDocker.NewNetwork("network_delete_before_test")
+	_, networkAutoConfiguration, err = iotmakerdocker.NewNetwork("network_delete_before_test")
 	if err != nil {
 		panic(err)
 	}
 
-	err, _, _, _ = NewContainerFromRemoteServerChangeVolumesWithNetworkConfiguration(
+	_, _, _, err = NewContainerFromRemoteServerChangeVolumesWithNetworkConfiguration(
 		"server_delete_before_test:latest",
 		"container_delete_before_test",
-		iotmakerDocker.KRestartPolicyOnFailure,
+		iotmakerdocker.KRestartPolicyOnFailure,
 		networkAutoConfiguration,
 		"https://github.com/helmutkemper/iotmaker.docker.util.whaleAquarium.sample.git",
 		[]string{},
@@ -87,6 +91,5 @@ func ExampleNewContainerFromRemoteServerChangeVolumesWithNetworkConfiguration() 
 
 	fmt.Printf("%s\n", site)
 	// Output:
-	// image pull complete!
 	// It's alive!
 }

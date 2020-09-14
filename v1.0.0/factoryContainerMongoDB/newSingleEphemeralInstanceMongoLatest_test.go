@@ -3,9 +3,8 @@ package factoryContainerMongoDB
 import (
 	"context"
 	"fmt"
-	iotmakerDocker "github.com/helmutkemper/iotmaker.docker"
 	"github.com/helmutkemper/iotmaker.docker.util.whaleAquarium/v1.0.0/toolsGarbageCollector"
-	"github.com/helmutkemper/iotmaker.docker/factoryDocker"
+	iotmakerdocker "github.com/helmutkemper/iotmaker.docker/v1.0.0"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 	"go.mongodb.org/mongo-driver/mongo/readpref"
@@ -14,9 +13,9 @@ import (
 
 func ExampleNewSingleEphemeralInstanceMongoLatest() {
 	var err error
-	var pullStatusChannel = factoryDocker.NewImagePullStatusChannel()
+	var pullStatusChannel = iotmakerdocker.NewImagePullStatusChannel()
 
-	go func(c chan iotmakerDocker.ContainerPullStatusSendToChannel) {
+	go func(c chan iotmakerdocker.ContainerPullStatusSendToChannel) {
 
 		for {
 			select {
@@ -30,6 +29,12 @@ func ExampleNewSingleEphemeralInstanceMongoLatest() {
 		}
 
 	}(*pullStatusChannel)
+
+	// stop and remove containers and garbage collector
+	err = toolsGarbageCollector.RemoveAllByNameContains("delete")
+	if err != nil {
+		panic(err)
+	}
 
 	err, _ = NewSingleEphemeralInstanceMongoLatest(
 		"container_delete_before_test",

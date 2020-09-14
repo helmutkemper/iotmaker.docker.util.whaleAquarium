@@ -5,8 +5,7 @@ import (
 	"github.com/docker/docker/api/types/network"
 	"github.com/docker/go-connections/nat"
 	"github.com/helmutkemper/iotmaker.db.mongodb.config/factoryMongoDBConfig"
-	iotmakerDocker "github.com/helmutkemper/iotmaker.docker"
-	"github.com/helmutkemper/iotmaker.docker/factoryDocker"
+	iotmakerdocker "github.com/helmutkemper/iotmaker.docker/v1.0.0"
 	"io/ioutil"
 	"os"
 )
@@ -14,16 +13,14 @@ import (
 func newMongoEphemeralWithNetworkConfiguration(
 	imageName,
 	containerName string,
-	containerRestartPolicy iotmakerDocker.RestartPolicy,
-	networkAutoConfiguration *iotmakerDocker.NextNetworkAutoConfiguration,
-	newPort nat.Port,
-	pullStatus *chan iotmakerDocker.ContainerPullStatusSendToChannel,
+	containerRestartPolicy iotmakerdocker.RestartPolicy,
+	networkAutoConfiguration *iotmakerdocker.NextNetworkAutoConfiguration,
+	pullStatus *chan iotmakerdocker.ContainerPullStatusSendToChannel,
 ) (err error, containerId, networkId string) {
 
 	var file []byte
 	var mountList []mount.Mount
 	var networkConfig *network.NetworkingConfig
-	var currentPort nat.Port
 
 	var relativeConfigFilePathToSave = "./config.conf"
 
@@ -41,7 +38,7 @@ func newMongoEphemeralWithNetworkConfiguration(
 	}
 
 	// init docker
-	var dockerSys = iotmakerDocker.DockerSystem{}
+	var dockerSys = iotmakerdocker.DockerSystem{}
 	err = dockerSys.Init()
 	if err != nil {
 		return
@@ -53,16 +50,16 @@ func newMongoEphemeralWithNetworkConfiguration(
 	}
 
 	// image pull and wait
-	err, _, _ = dockerSys.ImagePull(imageName, pullStatus)
+	_, _, err = dockerSys.ImagePull(imageName, pullStatus)
 	if err != nil {
 		return
 	}
 
 	// define an external MongoDB config file path
-	err, mountList = factoryDocker.NewVolumeMount(
-		[]iotmakerDocker.Mount{
+	mountList, err = iotmakerdocker.NewVolumeMount(
+		[]iotmakerdocker.Mount{
 			{
-				MountType:   iotmakerDocker.KVolumeMountTypeBind,
+				MountType:   iotmakerdocker.KVolumeMountTypeBind,
 				Source:      relativeConfigFilePathToSave,
 				Destination: "/etc/mongo.conf",
 			},
@@ -72,26 +69,23 @@ func newMongoEphemeralWithNetworkConfiguration(
 		return
 	}
 
-	currentPort, err = nat.NewPort("tcp", "27017")
-	if err != nil {
-		return
-	}
-	currentPortList := []nat.Port{
-		currentPort,
-	}
-
-	newPortList := []nat.Port{
-		newPort,
+	portMap := nat.PortMap{
+		// container port number/protocol [tpc/udp]
+		"27017/tcp": []nat.PortBinding{ // server original port
+			{
+				// server output port number
+				HostPort: "27017",
+			},
+		},
 	}
 
-	err, containerId = dockerSys.ContainerCreateChangeExposedPortAndStart(
+	containerId, err = dockerSys.ContainerCreateAndStart(
 		imageName,
 		containerName,
 		containerRestartPolicy,
+		portMap,
 		mountList,
 		networkConfig,
-		currentPortList,
-		newPortList,
 	)
 
 	return

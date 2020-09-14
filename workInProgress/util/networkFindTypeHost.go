@@ -3,20 +3,23 @@ package util
 import (
 	"errors"
 	"github.com/docker/docker/api/types"
-	iotmakerDocker "github.com/helmutkemper/iotmaker.docker"
+	iotmakerdocker "github.com/helmutkemper/iotmaker.docker/v1.0.0.0-RC"
 )
 
-func NetworkFindTypeHost() (err error, inspect types.NetworkResource) {
+func NetworkFindTypeHost() (
+	inspect types.NetworkResource,
+	err error,
+) {
 	var list []types.NetworkResource
-	var netDriveToFind = iotmakerDocker.KNetworkDriveHost
+	var netDriveToFind = iotmakerdocker.KNetworkDriveHost
 
-	ds := iotmakerDocker.DockerSystem{}
+	ds := iotmakerdocker.DockerSystem{}
 	err = ds.Init()
 	if err != nil {
 		return
 	}
 
-	err, list = ds.NetworkList()
+	list, err = ds.NetworkList()
 	if err != nil {
 		return
 	}
@@ -28,6 +31,5 @@ func NetworkFindTypeHost() (err error, inspect types.NetworkResource) {
 	}
 
 	err = errors.New("network type host not found")
-
 	return
 }

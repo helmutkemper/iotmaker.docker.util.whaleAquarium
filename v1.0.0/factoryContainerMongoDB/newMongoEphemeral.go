@@ -4,8 +4,7 @@ import (
 	"github.com/docker/docker/api/types/mount"
 	"github.com/docker/go-connections/nat"
 	"github.com/helmutkemper/iotmaker.db.mongodb.config/factoryMongoDBConfig"
-	iotmakerDocker "github.com/helmutkemper/iotmaker.docker"
-	"github.com/helmutkemper/iotmaker.docker/factoryDocker"
+	iotmakerdocker "github.com/helmutkemper/iotmaker.docker/v1.0.0"
 	"io/ioutil"
 	"os"
 )
@@ -14,11 +13,17 @@ func newMongoEphemeral(
 	imageName,
 	containerName string,
 	newPort nat.Port,
-	pullStatus *chan iotmakerDocker.ContainerPullStatusSendToChannel,
+	pullStatus *chan iotmakerdocker.ContainerPullStatusSendToChannel,
 ) (err error, containerId string) {
 
 	var file []byte
 	var mountList []mount.Mount
+	var defaultMongoDbPort nat.Port
+
+	defaultMongoDbPort, err = nat.NewPort("tcp", "27017")
+	if err != nil {
+		return
+	}
 
 	var relativeConfigFilePathToSave = "./config.conf"
 
@@ -36,23 +41,23 @@ func newMongoEphemeral(
 	}
 
 	// init docker
-	var dockerSys = iotmakerDocker.DockerSystem{}
+	var dockerSys = iotmakerdocker.DockerSystem{}
 	err = dockerSys.Init()
 	if err != nil {
 		return
 	}
 
 	// image pull and wait (true)
-	err, _, _ = dockerSys.ImagePull(imageName, pullStatus)
+	_, _, err = dockerSys.ImagePull(imageName, pullStatus)
 	if err != nil {
 		return
 	}
 
 	// define an external MongoDB config file path
-	err, mountList = factoryDocker.NewVolumeMount(
-		[]iotmakerDocker.Mount{
+	mountList, err = iotmakerdocker.NewVolumeMount(
+		[]iotmakerdocker.Mount{
 			{
-				MountType:   iotmakerDocker.KVolumeMountTypeBind,
+				MountType:   iotmakerdocker.KVolumeMountTypeBind,
 				Source:      relativeConfigFilePathToSave,
 				Destination: "/etc/mongo.conf",
 			},
@@ -62,23 +67,23 @@ func newMongoEphemeral(
 		return
 	}
 
-	currentPort, _ := nat.NewPort("tcp", "27017")
-	currentPortList := []nat.Port{
-		currentPort,
+	portMap := nat.PortMap{
+		// container port number/protocol [tpc/udp]
+		defaultMongoDbPort: []nat.PortBinding{ // server original port
+			{
+				// server output port number
+				HostPort: newPort.Port(),
+			},
+		},
 	}
 
-	newPortList := []nat.Port{
-		newPort,
-	}
-
-	err, containerId = dockerSys.ContainerCreateChangeExposedPortAndStart(
+	containerId, err = dockerSys.ContainerCreateAndStart(
 		imageName,
 		containerName,
-		iotmakerDocker.KRestartPolicyUnlessStopped,
+		iotmakerdocker.KRestartPolicyUnlessStopped,
+		portMap,
 		mountList,
 		nil,
-		currentPortList,
-		newPortList,
 	)
 
 	return

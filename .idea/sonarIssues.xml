@@ -1,0 +1,314 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="issues">
+    <option name="index">
+      <map>
+        <entry key="/Dummy.txt">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/README.md">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/v1.0.0/factoryContainerFromRemoteServer/newContainerCreateExposePortsAutomaticallyAndStart.go">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/v1.0.0/factoryContainerFromRemoteServer/newContainerCreateExposePortsAutomaticallyAndStart_test.go">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/v1.0.0/factoryContainerFromRemoteServer/newContainerFromRemoteServerChangeExposedPortAndVolumes.go">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/v1.0.0/factoryContainerFromRemoteServer/newContainerFromRemoteServerChangeExposedPortAndVolumesWithNetworkConfiguration.go">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/v1.0.0/factoryContainerFromRemoteServer/newContainerFromRemoteServerChangeExposedPortAndVolumesWithNetworkConfiguration_test.go">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/v1.0.0/factoryContainerFromRemoteServer/newContainerFromRemoteServerChangeExposedPortAndVolumes_test.go">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/v1.0.0/factoryContainerFromRemoteServer/newContainerFromRemoteServerChangeVolumes.go">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/v1.0.0/factoryContainerFromRemoteServer/newContainerFromRemoteServerChangeVolumesWithNetworkConfiguration.go">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/v1.0.0/factoryContainerFromRemoteServer/newContainerFromRemoteServerChangeVolumesWithNetworkConfiguration_test.go">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/v1.0.0/factoryContainerFromRemoteServer/newContainerFromRemoteServerChangeVolumes_test.go">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/v1.0.0/factoryContainerFromRemoteServer/newContainerFromRemoteServerWithNetworkConfiguration.go">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/v1.0.0/factoryContainerFromRemoteServer/newContainerFromRemoteServerWithNetworkConfiguration_test.go">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/v1.0.0/factoryContainerMongoDB/newMongoEphemeral.go">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/v1.0.0/factoryContainerMongoDB/newMongoEphemeralWithNetworkConfiguration.go">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/v1.0.0/factoryContainerMongoDB/newMongoEphemeralWithNetworkConfigurationAndWithoutPort.go">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/v1.0.0/factoryContainerMongoDB/newSingleEphemeralInstanceMongo.go">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/v1.0.0/factoryContainerMongoDB/newSingleEphemeralInstanceMongoLatest.go">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/v1.0.0/factoryContainerMongoDB/newSingleEphemeralInstanceMongoLatestWithPort.go">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/v1.0.0/factoryContainerMongoDB/newSingleEphemeralInstanceMongoLatestWithPort_test.go">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/v1.0.0/factoryContainerMongoDB/newSingleEphemeralInstanceMongoLatest_test.go">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/v1.0.0/factoryContainerMongoDB/newSingleEphemeralInstanceMongoWithNetworkConfigurationAndWithoutPort.go">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/v1.0.0/factoryContainerMongoDB/newSingleEphemeralInstanceMongoWithNetworkConfigurationAndWithoutPort_test.go">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/v1.0.0/factoryContainerMongoDB/newSingleEphemeralInstanceMongoWithPort.go">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/v1.0.0/factoryContainerMongoDB/newSingleEphemeralInstanceMongoWithPort_test.go">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/v1.0.0/factoryContainerMongoDB/newSingleEphemeralInstanceMongo_test.go">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/v1.0.0/factoryVault/NewVaultInDevelopmentMode.go">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/v1.0.0/factoryVault/NewVaultInDevelopmentMode_test.go">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/v1.0.0/toolsGarbageCollector/imageUnreferencedRemove.go">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/v1.0.0/toolsGarbageCollector/imageUnreferencedRemove_test.go">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/v1.0.0/toolsGarbageCollector/removeAllByName.go">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/v1.0.0/toolsGarbageCollector/volumesUnreferencedRemove.go">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/v1.0.0/toolsGarbageCollector/volumesUnreferencedRemove_test.go">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/workInProgress/rabbitmq/newRabbitMQLatest.go">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/workInProgress/util/networkFindTypeBridge.go">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/workInProgress/util/networkFindTypeHost.go">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/../iotmaker.docker/factoryDocker/NewNetworkWithHighAddress.go">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/../iotmaker.docker/factoryDocker/newClient.go">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/../iotmaker.docker/factoryDocker/newImagePullStatusChannel.go">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/../iotmaker.docker/factoryDocker/newNetwork.go">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/../iotmaker.docker/factoryDocker/newPullStatusMonitor.go">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/../iotmaker.docker/factoryDocker/newRestartPolicyAlways.go">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/../iotmaker.docker/factoryDocker/newRestartPolicyOnFailure.go">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/../iotmaker.docker/factoryDocker/newRestartPolicyRestartPolicyNoRestart.go">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/../iotmaker.docker/factoryDocker/newRestartPolicyRestartPolicyUnlessStopped.go">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/../iotmaker.docker/factoryDocker/newVolumeMount.go">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/../iotmaker.docker/v1.0.0.0-RC/doc.go">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/../iotmaker.docker/v1.0.0.0-RC/imageListExposedNatPort.go">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/../iotmaker.docker/v1.0.0.0-RC/imageListExposedPorts.go">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/../iotmaker.docker/v1.0.0.0-RC/imageListExposedPortsByName.go">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/../iotmaker.docker/v1.0.0.0-RC/newClient.go">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/../iotmaker.docker/v1.0.0.0-RC/newImagePullStatusChannel.go">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/../iotmaker.docker/v1.0.0.0-RC/newNetwork.go">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/../iotmaker.docker/v1.0.0.0-RC/newNetworkWithHighAddress.go">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/../iotmaker.docker/v1.0.0.0-RC/newPullStatusMonitor.go">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/../iotmaker.docker/v1.0.0.0-RC/newRestartPolicyAlways.go">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/../iotmaker.docker/v1.0.0.0-RC/newRestartPolicyOnFailure.go">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/../iotmaker.docker/v1.0.0.0-RC/newRestartPolicyRestartPolicyNoRestart.go">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/../iotmaker.docker/v1.0.0.0-RC/newRestartPolicyRestartPolicyUnlessStopped.go">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/../iotmaker.docker/v1.0.0.0-RC/newVolumeMount.go">
+          <value>
+            <set />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+</project>

@@ -1,5 +1,17 @@
 # iotmaker.docker.util.whaleAquarium
 
+<p align="center">
+  <img src="https://github.com/helmutkemper/iotmaker.docker.util.whaleAquarium/blob/master/image/Go-Logo_LightBlue.svg" width="500">
+</p>
+<p align="center">
+  <a href="https://goreportcard.com/report/github.com/helmutkemper/iotmaker.docker.util.whaleAquarium">
+    <img src="https://goreportcard.com/badge/github.com/helmutkemper/iotmaker.docker.util.whaleAquarium">
+  </a>
+  <a href="https://pkg.go.dev/github.com/helmutkemper/iotmaker.docker.util.whaleAquarium/v1.0.0?tab=doc">
+    <img src="https://github.com/helmutkemper/iotmaker.docker.util.whaleAquarium/blob/master/image/godoc.svg">
+  </a>
+</p>
+
 > work in progress! sorry...
 
 This package makes it easy to install ready-to-use containers.

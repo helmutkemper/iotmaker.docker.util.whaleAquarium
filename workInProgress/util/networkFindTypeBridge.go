@@ -3,30 +3,30 @@ package util
 import (
 	"errors"
 	"github.com/docker/docker/api/types"
-	iotmakerDocker "github.com/helmutkemper/iotmaker.docker"
+	iotmakerdocker "github.com/helmutkemper/iotmaker.docker/v1.0.0.0-RC"
 )
 
 func NetworkFindTypeBridge() (err error, inspectList []types.NetworkResource) {
 	var list []types.NetworkResource
 	var inspect types.NetworkResource
-	var netDriveToFind = iotmakerDocker.KNetworkDriveBridge
+	var netDriveToFind = iotmakerdocker.KNetworkDriveBridge
 
 	inspectList = make([]types.NetworkResource, 0)
 
-	ds := iotmakerDocker.DockerSystem{}
+	ds := iotmakerdocker.DockerSystem{}
 	err = ds.Init()
 	if err != nil {
 		return
 	}
 
-	err, list = ds.NetworkList()
+	list, err = ds.NetworkList()
 	if err != nil {
 		return
 	}
 
 	for _, net := range list {
 		if net.Driver == netDriveToFind.String() {
-			err, inspect = ds.NetworkInspect(net.ID)
+			inspect, err = ds.NetworkInspect(net.ID)
 			if err != nil {
 				return
 			}

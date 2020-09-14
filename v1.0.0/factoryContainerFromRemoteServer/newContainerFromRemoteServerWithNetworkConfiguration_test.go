@@ -2,19 +2,18 @@ package factoryContainerFromRemoteServer
 
 import (
 	"fmt"
-	iotmakerDocker "github.com/helmutkemper/iotmaker.docker"
 	"github.com/helmutkemper/iotmaker.docker.util.whaleAquarium/v1.0.0/toolsGarbageCollector"
-	"github.com/helmutkemper/iotmaker.docker/factoryDocker"
+	iotmakerdocker "github.com/helmutkemper/iotmaker.docker/v1.0.0"
 	"io/ioutil"
 	"net/http"
 )
 
 func ExampleNewContainerFromRemoteServerWithNetworkConfiguration() {
 	var err error
-	var pullStatusChannel = factoryDocker.NewImagePullStatusChannel()
-	var networkAutoConfiguration *iotmakerDocker.NextNetworkAutoConfiguration
+	var pullStatusChannel = iotmakerdocker.NewImagePullStatusChannel()
+	var networkAutoConfiguration *iotmakerdocker.NextNetworkAutoConfiguration
 
-	go func(c chan iotmakerDocker.ContainerPullStatusSendToChannel) {
+	go func(c chan iotmakerdocker.ContainerPullStatusSendToChannel) {
 
 		for {
 			select {
@@ -22,14 +21,19 @@ func ExampleNewContainerFromRemoteServerWithNetworkConfiguration() {
 				//fmt.Printf("image pull status: %+v\n", status)
 
 				if status.Closed == true {
-					fmt.Println("image pull complete!")
+					//fmt.Println("image pull complete!")
 				}
 			}
 		}
 
 	}(*pullStatusChannel)
 
-	err, _, networkAutoConfiguration = factoryDocker.NewNetwork("network_delete_before_test")
+	err = toolsGarbageCollector.RemoveAllByNameContains("delete")
+	if err != nil {
+		panic(err)
+	}
+
+	_, networkAutoConfiguration, err = iotmakerdocker.NewNetwork("network_delete_before_test")
 	if err != nil {
 		panic(err)
 	}
@@ -37,7 +41,7 @@ func ExampleNewContainerFromRemoteServerWithNetworkConfiguration() {
 	err, _, _, _ = NewContainerFromRemoteServerWithNetworkConfiguration(
 		"server_delete_before_test:latest",
 		"container_delete_before_test",
-		iotmakerDocker.KRestartPolicyOnFailure,
+		iotmakerdocker.KRestartPolicyOnFailure,
 		networkAutoConfiguration,
 		"https://github.com/helmutkemper/iotmaker.docker.util.whaleAquarium.sample.git",
 		[]string{},
@@ -71,6 +75,5 @@ func ExampleNewContainerFromRemoteServerWithNetworkConfiguration() {
 
 	fmt.Printf("%s\n", site)
 	// Output:
-	// image pull complete!
 	// It's alive!
 }

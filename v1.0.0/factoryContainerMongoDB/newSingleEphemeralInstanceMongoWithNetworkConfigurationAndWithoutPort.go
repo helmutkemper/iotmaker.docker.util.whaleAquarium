@@ -1,15 +1,13 @@
 package factoryContainerMongoDB
 
-import (
-	iotmakerDocker "github.com/helmutkemper/iotmaker.docker"
-)
+import iotmakerdocker "github.com/helmutkemper/iotmaker.docker/v1.0.0"
 
 func NewSingleEphemeralInstanceMongoWithNetworkConfigurationAndWithoutPort(
 	containerName string,
-	newContainerRestartPolicy iotmakerDocker.RestartPolicy,
-	networkAutoConfiguration *iotmakerDocker.NextNetworkAutoConfiguration,
+	newContainerRestartPolicy iotmakerdocker.RestartPolicy,
+	networkAutoConfiguration *iotmakerdocker.NextNetworkAutoConfiguration,
 	version MongoDBVersionTag,
-	pullStatus *chan iotmakerDocker.ContainerPullStatusSendToChannel,
+	pullStatus *chan iotmakerdocker.ContainerPullStatusSendToChannel,
 ) (err error, containerId, networkId string) {
 
 	var imageName = "mongo:" + version.String()

@@ -3,9 +3,8 @@ package factoryContainerMongoDB
 import (
 	"context"
 	"fmt"
-	iotmakerDocker "github.com/helmutkemper/iotmaker.docker"
 	"github.com/helmutkemper/iotmaker.docker.util.whaleAquarium/v1.0.0/toolsGarbageCollector"
-	"github.com/helmutkemper/iotmaker.docker/factoryDocker"
+	iotmakerdocker "github.com/helmutkemper/iotmaker.docker/v1.0.0"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 	"go.mongodb.org/mongo-driver/mongo/readpref"
@@ -14,9 +13,9 @@ import (
 
 func ExampleNewSingleEphemeralInstanceMongo() {
 	var err error
-	var pullStatusChannel = factoryDocker.NewImagePullStatusChannel()
+	var pullStatusChannel = iotmakerdocker.NewImagePullStatusChannel()
 
-	go func(c chan iotmakerDocker.ContainerPullStatusSendToChannel) {
+	go func(c chan iotmakerdocker.ContainerPullStatusSendToChannel) {
 
 		for {
 			select {
@@ -24,12 +23,18 @@ func ExampleNewSingleEphemeralInstanceMongo() {
 				//fmt.Printf("image pull status: %+v\n", status)
 
 				if status.Closed == true {
-					fmt.Println("image pull complete!")
+					//fmt.Println("image pull complete!")
 				}
 			}
 		}
 
 	}(*pullStatusChannel)
+
+	// stop and remove containers and garbage collector
+	err = toolsGarbageCollector.RemoveAllByNameContains("delete")
+	if err != nil {
+		panic(err)
+	}
 
 	err, _ = NewSingleEphemeralInstanceMongo(
 		"container_delete_before_test",
@@ -67,6 +72,5 @@ func ExampleNewSingleEphemeralInstanceMongo() {
 	}
 
 	// Output:
-	// image pull complete!
 	// ping ok
 }

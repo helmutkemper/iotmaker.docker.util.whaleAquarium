@@ -4,7 +4,7 @@ import (
 	"bytes"
 	"github.com/docker/docker/api/types/mount"
 	"github.com/docker/go-connections/nat"
-	iotmakerDocker "github.com/helmutkemper/iotmaker.docker"
+	iotmakerdocker "github.com/helmutkemper/iotmaker.docker/v1.0.0"
 	"regexp"
 )
 
@@ -14,7 +14,7 @@ func NewVaultInDevelopmentMode(
 	containerName string,
 	version VaultVersionTag,
 	//newPort nat.Port,
-	pullStatus *chan iotmakerDocker.ContainerPullStatusSendToChannel,
+	pullStatus *chan iotmakerdocker.ContainerPullStatusSendToChannel,
 ) (
 	err error,
 	containerId string,
@@ -37,48 +37,52 @@ func NewVaultInDevelopmentMode(
 	var tmp []byte
 
 	// init docker
-	var dockerSys = iotmakerDocker.DockerSystem{}
+	var dockerSys = iotmakerdocker.DockerSystem{}
 	err = dockerSys.Init()
 	if err != nil {
 		return
 	}
 
-	err, _, _ = dockerSys.ImagePull(imageName, pullStatus)
+	_, _, err = dockerSys.ImagePull(imageName, pullStatus)
 	if err != nil {
 		return
 	}
 
-	defaultListenPort, _ := nat.NewPort("tcp", "8200")
-	unknownPort, _ := nat.NewPort("tcp", "8201")
-	currentPortList := []nat.Port{
-		defaultListenPort,
-		unknownPort,
+	portMap := nat.PortMap{
+		// container port number/protocol [tpc/udp]
+		"8200/tcp": []nat.PortBinding{ // server original port
+			{
+				// server output port number
+				HostPort: "8200",
+			},
+		},
+		// container port number/protocol [tpc/udp]
+		"8201/tcp": []nat.PortBinding{ // server original port
+			{
+				// server output port number
+				HostPort: "8201",
+			},
+		},
 	}
 
-	newPortList := []nat.Port{
-		defaultListenPort,
-		unknownPort,
-	}
-
-	err, containerId = dockerSys.ContainerCreateChangeExposedPortAndStart(
+	containerId, err = dockerSys.ContainerCreateAndStart(
 		imageName,
 		containerName,
-		iotmakerDocker.KRestartPolicyUnlessStopped,
+		iotmakerdocker.KRestartPolicyUnlessStopped,
+		portMap,
 		mountList,
 		nil,
-		currentPortList,
-		newPortList,
 	)
 	if err != nil {
 		return
 	}
 
-	err, containerId = dockerSys.ContainerFindIdByName("vaultContainer")
+	containerId, err = dockerSys.ContainerFindIdByName("vaultContainer")
 
 	upgradingKeysFinishedRegExp = regexp.MustCompile("(?mi)upgrading keys finished") //todo: make const
 	var pass = false
 	for {
-		err, log = dockerSys.ContainerLogs(containerId)
+		log, err = dockerSys.ContainerLogs(containerId)
 		if err != nil {
 			return
 		}

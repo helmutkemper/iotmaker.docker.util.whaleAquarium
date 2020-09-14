@@ -3,7 +3,7 @@ package toolsGarbageCollector
 import (
 	"fmt"
 	"github.com/docker/docker/api/types"
-	iotmakerDocker "github.com/helmutkemper/iotmaker.docker"
+	iotmakerdocker "github.com/helmutkemper/iotmaker.docker/v1.0.0"
 )
 
 func ExampleImageUnreferencedRemove() {
@@ -15,13 +15,13 @@ func ExampleImageUnreferencedRemove() {
 		panic(err)
 	}
 
-	var dockerSys = iotmakerDocker.DockerSystem{}
+	var dockerSys = iotmakerdocker.DockerSystem{}
 	err = dockerSys.Init()
 	if err != nil {
 		panic(err)
 	}
 
-	err, list = dockerSys.ImageList()
+	list, err = dockerSys.ImageList()
 	for _, image := range list {
 		if len(image.RepoTags) > 0 {
 			if image.RepoTags[0] == "<none>:<none>" {

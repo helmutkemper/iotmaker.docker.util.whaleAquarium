@@ -3,9 +3,8 @@ package factoryContainerFromRemoteServer
 import (
 	"fmt"
 	"github.com/docker/docker/api/types/mount"
-	iotmakerDocker "github.com/helmutkemper/iotmaker.docker"
 	"github.com/helmutkemper/iotmaker.docker.util.whaleAquarium/v1.0.0/toolsGarbageCollector"
-	"github.com/helmutkemper/iotmaker.docker/factoryDocker"
+	iotmakerdocker "github.com/helmutkemper/iotmaker.docker/v1.0.0"
 	"io/ioutil"
 	"net/http"
 )
@@ -14,10 +13,10 @@ import (
 // "It's alive!" inside file, without html tags and line breaks.
 func ExampleNewContainerFromRemoteServerChangeVolumes() {
 	var err error
-	var pullStatusChannel = factoryDocker.NewImagePullStatusChannel()
+	var pullStatusChannel = iotmakerdocker.NewImagePullStatusChannel()
 	var volumesList []mount.Mount
 
-	go func(c chan iotmakerDocker.ContainerPullStatusSendToChannel) {
+	go func(c chan iotmakerdocker.ContainerPullStatusSendToChannel) {
 
 		for {
 			select {
@@ -25,17 +24,22 @@ func ExampleNewContainerFromRemoteServerChangeVolumes() {
 				//fmt.Printf("image pull status: %+v\n", status)
 
 				if status.Closed == true {
-					fmt.Println("image pull complete!")
+					//fmt.Println("image pull complete!")
 				}
 			}
 		}
 
 	}(*pullStatusChannel)
 
-	err, volumesList = factoryDocker.NewVolumeMount(
-		[]iotmakerDocker.Mount{
+	err = toolsGarbageCollector.RemoveAllByNameContains("delete")
+	if err != nil {
+		panic(err)
+	}
+
+	volumesList, err = iotmakerdocker.NewVolumeMount(
+		[]iotmakerdocker.Mount{
 			{
-				MountType:   iotmakerDocker.KVolumeMountTypeBind,
+				MountType:   iotmakerdocker.KVolumeMountTypeBind,
 				Source:      "C:\\static", //absolute or relative to this code
 				Destination: "/static",    //folder inside container
 			},
@@ -45,7 +49,7 @@ func ExampleNewContainerFromRemoteServerChangeVolumes() {
 		panic(err)
 	}
 
-	err, _, _ = NewContainerFromRemoteServerChangeVolumes(
+	_, _, err = NewContainerFromRemoteServerChangeVolumes(
 		"server_delete_before_test:latest",
 		"container_delete_before_test",
 		"https://github.com/helmutkemper/iotmaker.docker.util.whaleAquarium.sample.git",
@@ -81,6 +85,5 @@ func ExampleNewContainerFromRemoteServerChangeVolumes() {
 
 	fmt.Printf("%s\n", site)
 	// Output:
-	// image pull complete!
 	// It's alive!
 }

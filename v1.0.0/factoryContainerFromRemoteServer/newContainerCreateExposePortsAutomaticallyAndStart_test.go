@@ -2,9 +2,8 @@ package factoryContainerFromRemoteServer
 
 import (
 	"fmt"
-	iotmakerDocker "github.com/helmutkemper/iotmaker.docker"
 	"github.com/helmutkemper/iotmaker.docker.util.whaleAquarium/v1.0.0/toolsGarbageCollector"
-	"github.com/helmutkemper/iotmaker.docker/factoryDocker"
+	iotmakerdocker "github.com/helmutkemper/iotmaker.docker/v1.0.0"
 	"io/ioutil"
 	"net/http"
 )
@@ -13,9 +12,9 @@ import (
 // "It's alive!" inside file, without html tags and line breaks.
 func ExampleNewContainerCreateExposePortsAutomaticallyAndStart() {
 	var err error
-	var pullStatusChannel = factoryDocker.NewImagePullStatusChannel()
+	var pullStatusChannel = iotmakerdocker.NewImagePullStatusChannel()
 
-	go func(c chan iotmakerDocker.ContainerPullStatusSendToChannel) {
+	go func(c chan iotmakerdocker.ContainerPullStatusSendToChannel) {
 
 		for {
 			select {
@@ -23,14 +22,19 @@ func ExampleNewContainerCreateExposePortsAutomaticallyAndStart() {
 				//fmt.Printf("image pull status: %+v\n", status)
 
 				if status.Closed == true {
-					fmt.Println("image pull complete!")
+					//fmt.Println("image pull complete!")
 				}
 			}
 		}
 
 	}(*pullStatusChannel)
 
-	err, _, _ = NewContainerCreateExposePortsAutomaticallyAndStart(
+	err = toolsGarbageCollector.RemoveAllByNameContains("delete")
+	if err != nil {
+		panic(err)
+	}
+
+	_, _, err = NewContainerCreateExposePortsAutomaticallyAndStart(
 		"server_delete_before_test:latest",
 		"container_delete_before_test",
 		"https://github.com/helmutkemper/iotmaker.docker.util.whaleAquarium.sample.git",
@@ -65,6 +69,5 @@ func ExampleNewContainerCreateExposePortsAutomaticallyAndStart() {
 
 	fmt.Printf("%s\n", site)
 	// Output:
-	// image pull complete!
 	// It's alive!
 }

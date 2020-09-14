@@ -2,12 +2,12 @@ package factoryContainerMongoDB
 
 import (
 	"github.com/docker/go-connections/nat"
-	iotmakerDocker "github.com/helmutkemper/iotmaker.docker"
+	iotmakerdocker "github.com/helmutkemper/iotmaker.docker/v1.0.0"
 )
 
 func NewSingleEphemeralInstanceMongoLatest(
 	containerName string,
-	pullStatus *chan iotmakerDocker.ContainerPullStatusSendToChannel,
+	pullStatus *chan iotmakerdocker.ContainerPullStatusSendToChannel,
 ) (err error, containerId string) {
 
 	var imageName = "mongo:latest"

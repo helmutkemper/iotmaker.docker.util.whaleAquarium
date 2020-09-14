@@ -2,19 +2,19 @@ package toolsGarbageCollector
 
 import (
 	"github.com/docker/docker/api/types"
-	iotmakerDocker "github.com/helmutkemper/iotmaker.docker"
+	iotmakerdocker "github.com/helmutkemper/iotmaker.docker/v1.0.0"
 )
 
 // Remove unreferenced volumes
 func VolumesUnreferencedRemove() (err error) {
-	var dockerSys = iotmakerDocker.DockerSystem{}
+	var dockerSys = iotmakerdocker.DockerSystem{}
 	var volumes []types.Volume
 	err = dockerSys.Init()
 	if err != nil {
 		return
 	}
 
-	err, volumes = dockerSys.VolumeList()
+	volumes, err = dockerSys.VolumeList()
 	if err != nil {
 		return
 	}

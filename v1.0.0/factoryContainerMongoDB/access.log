@@ -54,3 +54,535 @@ Removing intermediate container 5861c3ec3bb2
 Successfully built ecfb2e3a2c07
 Successfully tagged image_server_delete_before_test:latest
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Step 1/12 : FROM golang:alpine3.12 as builder
+
+ ---> Running in cf8087837f69
+Removing intermediate container cf8087837f69
+ ---> d8042d4f42d7
+ ---> Running in b8ecd642ff68
+Removing intermediate container b8ecd642ff68
+ ---> fca342b48053
+ ---> Running in ca0fc18e1bad
+fetch http://dl-cdn.alpinelinux.org/alpine/v3.12/main/x86_64/APKINDEX.tar.gz
+fetch http://dl-cdn.alpinelinux.org/alpine/v3.12/community/x86_64/APKINDEX.tar.gz
+(1/5) Installing nghttp2-libs (1.41.0-r0)
+(2/5) Installing libcurl (7.69.1-r0)
+(3/5) Installing expat (2.2.9-r1)
+(4/5) Installing pcre2 (10.35-r0)
+(5/5) Installing git (2.26.2-r0)
+Executing busybox-1.31.1-r16.trigger
+OK: 22 MiB in 20 packages
+Removing intermediate container ca0fc18e1bad
+ ---> 85c316e057a2
+ ---> Running in 4c77ebcce84d
+[91mpackage go.mongodb.org/mongo-driver: no Go files in /go/src/go.mongodb.org/mongo-driver
+[0m
+Removing intermediate container 4c77ebcce84d
+ ---> 10e404a6187e
+ ---> 6ac57585794f
+Step 7/12 : ARG CGO_ENABLED=0
+ ---> Running in e515214be70e
+Removing intermediate container e515214be70e
+ ---> ffb554f4ae93
+ ---> Running in d15aa4d30dfa
+Removing intermediate container d15aa4d30dfa
+ ---> 693614bf23de
+ ---> be5cc677025b
+Step 11/12 : EXPOSE 8080
+ ---> Running in 0ae14df4396a
+Removing intermediate container 0ae14df4396a
+ ---> 0bebb68029de
+ ---> Running in 75278ceb5c98
+Removing intermediate container 75278ceb5c98
+ ---> cbf47eff44bf
+Successfully built cbf47eff44bf
+Successfully tagged image_server_delete_before_test:latest
+
+
+
+
+
+
+
+
+
+
+Step 1/12 : FROM golang:alpine3.12 as builder
+
+ ---> Running in 0bbea2592cbb
+Removing intermediate container 0bbea2592cbb
+ ---> 3e6672d9a501
+ ---> Running in 774d9c441332
+Removing intermediate container 774d9c441332
+ ---> f2dd281101ef
+ ---> Running in 8f08d694e8f8
+fetch http://dl-cdn.alpinelinux.org/alpine/v3.12/main/x86_64/APKINDEX.tar.gz
+fetch http://dl-cdn.alpinelinux.org/alpine/v3.12/community/x86_64/APKINDEX.tar.gz
+(1/5) Installing nghttp2-libs (1.41.0-r0)
+(2/5) Installing libcurl (7.69.1-r0)
+(3/5) Installing expat (2.2.9-r1)
+(4/5) Installing pcre2 (10.35-r0)
+(5/5) Installing git (2.26.2-r0)
+Executing busybox-1.31.1-r16.trigger
+OK: 22 MiB in 20 packages
+Removing intermediate container 8f08d694e8f8
+ ---> 6465bf8e99f3
+ ---> Running in ec1fd5f7bb4f

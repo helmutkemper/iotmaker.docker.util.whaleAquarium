@@ -3,7 +3,7 @@ package toolsGarbageCollector
 import (
 	"fmt"
 	"github.com/docker/docker/api/types"
-	iotmakerDocker "github.com/helmutkemper/iotmaker.docker"
+	iotmakerdocker "github.com/helmutkemper/iotmaker.docker/v1.0.0"
 )
 
 func ExampleVolumesUnreferencedRemove() {
@@ -11,13 +11,13 @@ func ExampleVolumesUnreferencedRemove() {
 	var volumes []types.Volume
 	var counterUnreferencedVolumes = 0
 
-	var dockerSys = iotmakerDocker.DockerSystem{}
+	var dockerSys = iotmakerdocker.DockerSystem{}
 	err = dockerSys.Init()
 	if err != nil {
 		panic(err)
 	}
 
-	err, volumes = dockerSys.VolumeList()
+	volumes, err = dockerSys.VolumeList()
 	for _, volumeData := range volumes {
 		if volumeData.UsageData == nil || volumeData.UsageData.RefCount == -1 {
 			counterUnreferencedVolumes += 1
@@ -34,7 +34,7 @@ func ExampleVolumesUnreferencedRemove() {
 	}
 
 	counterUnreferencedVolumes = 0
-	err, volumes = dockerSys.VolumeList()
+	volumes, err = dockerSys.VolumeList()
 	for _, volumeData := range volumes {
 		if volumeData.UsageData == nil || volumeData.UsageData.RefCount == -1 {
 			counterUnreferencedVolumes += 1

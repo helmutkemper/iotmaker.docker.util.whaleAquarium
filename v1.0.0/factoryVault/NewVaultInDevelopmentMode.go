@@ -24,17 +24,12 @@ func NewVaultInDevelopmentMode(
 	vaultUnsealKey string,
 ) {
 
-	var ApiAddressRegExp *regexp.Regexp
-	var ClusterAddressRegExp *regexp.Regexp
-	var UnsealKeyRegExp *regexp.Regexp
-	var RootTokenRegExp *regexp.Regexp
 	var upgradingKeysFinishedRegExp *regexp.Regexp
 
 	var imageName = "vault:" + version.String()
 	var mountList []mount.Mount
 	var log []byte
 	var logData [][]byte
-	var tmp []byte
 
 	// init docker
 	var dockerSys = iotmakerdocker.DockerSystem{}
@@ -99,6 +94,64 @@ func NewVaultInDevelopmentMode(
 			break
 		}
 	}
+
+	ApiAddress, ClusterAddress, vaultUnsealKey, vaultRootToken = filterLogData(logData)
+	/*
+		ApiAddressRegExp = regexp.MustCompile("(?mi)(^.*\\(addr:\\s+[\"'])(?P<ApiAddress>[\\d.:]+)([\"'].*)")
+		ClusterAddressRegExp = regexp.MustCompile("(?mi)(^.*cluster\\s+address:\\s+[\"'])(?P<ClusterAddress>[\\d.:]+)([\"'].*)")
+		UnsealKeyRegExp = regexp.MustCompile("(?mi)(^.*Unseal\\s+Key:\\s+)(?P<UnsealKey>.{44})(.*)")
+		RootTokenRegExp = regexp.MustCompile("(?mi)(^.*Root\\s+Token:\\s+)(?P<RootToken>.{26})(.*)")
+		for _, logLine := range logData {
+			if ApiAddressRegExp.Match(logLine) == true {
+				tmp = ApiAddressRegExp.ReplaceAll(logLine, []byte("${ApiAddress}"))
+				if len(tmp) != 0 {
+					ApiAddress = string(tmp)
+				}
+			}
+
+			if ClusterAddressRegExp.Match(logLine) == true {
+				tmp = ClusterAddressRegExp.ReplaceAll(logLine, []byte("${ClusterAddress}"))
+				if len(tmp) != 0 {
+					ClusterAddress = string(tmp)
+				}
+			}
+
+			if UnsealKeyRegExp.Match(logLine) == true {
+				tmp = UnsealKeyRegExp.ReplaceAll(logLine, []byte("${UnsealKey}"))
+				if len(tmp) != 0 {
+					vaultUnsealKey = string(tmp)
+					continue
+				}
+			}
+
+			if RootTokenRegExp.Match(logLine) == true {
+				tmp = RootTokenRegExp.ReplaceAll(logLine, []byte("${RootToken}"))
+				if len(tmp) != 0 {
+					vaultRootToken = string(tmp)
+					break
+				}
+			}
+		}
+	*/
+
+	return
+}
+
+func filterLogData(
+	logData [][]byte,
+) (
+	ApiAddress string,
+	ClusterAddress string,
+	vaultUnsealKey string,
+	vaultRootToken string,
+) {
+
+	var ApiAddressRegExp *regexp.Regexp
+	var ClusterAddressRegExp *regexp.Regexp
+	var UnsealKeyRegExp *regexp.Regexp
+	var RootTokenRegExp *regexp.Regexp
+
+	var tmp []byte
 
 	ApiAddressRegExp = regexp.MustCompile("(?mi)(^.*\\(addr:\\s+[\"'])(?P<ApiAddress>[\\d.:]+)([\"'].*)")
 	ClusterAddressRegExp = regexp.MustCompile("(?mi)(^.*cluster\\s+address:\\s+[\"'])(?P<ClusterAddress>[\\d.:]+)([\"'].*)")

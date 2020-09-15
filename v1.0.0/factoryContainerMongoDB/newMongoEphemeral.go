@@ -9,6 +9,9 @@ import (
 	"os"
 )
 
+// newMongoEphemeral (English):
+//
+// newMongoEphemeral (Português):
 func newMongoEphemeral(
 	imageName,
 	containerName string,

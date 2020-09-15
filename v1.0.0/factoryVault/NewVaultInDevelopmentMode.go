@@ -8,8 +8,11 @@ import (
 	"regexp"
 )
 
-//Manage Secrets and Protect Sensitive Data
-//https://www.vaultproject.io/
+// NewVaultInDevelopmentMode (English): Manage Secrets and Protect Sensitive Data
+// Site: https://www.vaultproject.io/
+//
+// NewVaultInDevelopmentMode (Português): Gerencia segredos e protege dados sensíveis
+// Site: https://www.vaultproject.io/
 func NewVaultInDevelopmentMode(
 	containerName string,
 	version VaultVersionTag,
@@ -96,44 +99,6 @@ func NewVaultInDevelopmentMode(
 	}
 
 	ApiAddress, ClusterAddress, vaultUnsealKey, vaultRootToken = filterLogData(logData)
-	/*
-		ApiAddressRegExp = regexp.MustCompile("(?mi)(^.*\\(addr:\\s+[\"'])(?P<ApiAddress>[\\d.:]+)([\"'].*)")
-		ClusterAddressRegExp = regexp.MustCompile("(?mi)(^.*cluster\\s+address:\\s+[\"'])(?P<ClusterAddress>[\\d.:]+)([\"'].*)")
-		UnsealKeyRegExp = regexp.MustCompile("(?mi)(^.*Unseal\\s+Key:\\s+)(?P<UnsealKey>.{44})(.*)")
-		RootTokenRegExp = regexp.MustCompile("(?mi)(^.*Root\\s+Token:\\s+)(?P<RootToken>.{26})(.*)")
-		for _, logLine := range logData {
-			if ApiAddressRegExp.Match(logLine) == true {
-				tmp = ApiAddressRegExp.ReplaceAll(logLine, []byte("${ApiAddress}"))
-				if len(tmp) != 0 {
-					ApiAddress = string(tmp)
-				}
-			}
-
-			if ClusterAddressRegExp.Match(logLine) == true {
-				tmp = ClusterAddressRegExp.ReplaceAll(logLine, []byte("${ClusterAddress}"))
-				if len(tmp) != 0 {
-					ClusterAddress = string(tmp)
-				}
-			}
-
-			if UnsealKeyRegExp.Match(logLine) == true {
-				tmp = UnsealKeyRegExp.ReplaceAll(logLine, []byte("${UnsealKey}"))
-				if len(tmp) != 0 {
-					vaultUnsealKey = string(tmp)
-					continue
-				}
-			}
-
-			if RootTokenRegExp.Match(logLine) == true {
-				tmp = RootTokenRegExp.ReplaceAll(logLine, []byte("${RootToken}"))
-				if len(tmp) != 0 {
-					vaultRootToken = string(tmp)
-					break
-				}
-			}
-		}
-	*/
-
 	return
 }
 

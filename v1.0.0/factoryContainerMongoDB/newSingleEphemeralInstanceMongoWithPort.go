@@ -5,6 +5,10 @@ import (
 	iotmakerdocker "github.com/helmutkemper/iotmaker.docker/v1.0.0"
 )
 
+// NewSingleEphemeralInstanceMongoWithPort (English): Install mongoDB with ephemeral data
+//
+// NewSingleEphemeralInstanceMongoWithPort (Português): Instala o MongoDB com dados
+// efêmeros
 func NewSingleEphemeralInstanceMongoWithPort(
 	containerName string,
 	port nat.Port,

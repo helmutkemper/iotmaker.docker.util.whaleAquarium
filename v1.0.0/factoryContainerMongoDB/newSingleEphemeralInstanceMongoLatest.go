@@ -5,6 +5,11 @@ import (
 	iotmakerdocker "github.com/helmutkemper/iotmaker.docker/v1.0.0"
 )
 
+// NewSingleEphemeralInstanceMongoLatest (English): Install a last version of MongoDB
+// with ephemeral data
+//
+// NewSingleEphemeralInstanceMongoLatest (Português): Instala a última versão do MongoDB
+// com dados efêmeros
 func NewSingleEphemeralInstanceMongoLatest(
 	containerName string,
 	pullStatus *chan iotmakerdocker.ContainerPullStatusSendToChannel,

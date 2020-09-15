@@ -10,6 +10,9 @@ import (
 	"os"
 )
 
+// newMongoEphemeralWithNetworkConfiguration (English):
+//
+// newMongoEphemeralWithNetworkConfiguration (Português):
 func newMongoEphemeralWithNetworkConfiguration(
 	imageName,
 	containerName string,

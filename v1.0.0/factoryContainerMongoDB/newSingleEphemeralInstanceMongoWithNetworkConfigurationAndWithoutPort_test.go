@@ -45,7 +45,7 @@ func ExampleNewSingleEphemeralInstanceMongoWithNetworkConfigurationAndWithoutPor
 	}
 
 	// address: 10.0.0.2
-	err, _, _ = NewSingleEphemeralInstanceMongoWithNetworkConfigurationAndWithoutPort(
+	_, _, err = NewSingleEphemeralInstanceMongoWithNetworkConfigurationAndWithoutPort(
 		"container_a_delete_before_test",
 		iotmakerdocker.KRestartPolicyOnFailure,
 		networkAutoConfiguration,
@@ -57,7 +57,7 @@ func ExampleNewSingleEphemeralInstanceMongoWithNetworkConfigurationAndWithoutPor
 	}
 
 	// address: 10.0.0.3
-	err, _, _ = NewSingleEphemeralInstanceMongoWithNetworkConfigurationAndWithoutPort(
+	_, _, err = NewSingleEphemeralInstanceMongoWithNetworkConfigurationAndWithoutPort(
 		"container_b_delete_before_test",
 		iotmakerdocker.KRestartPolicyOnFailure,
 		networkAutoConfiguration,
@@ -69,7 +69,7 @@ func ExampleNewSingleEphemeralInstanceMongoWithNetworkConfigurationAndWithoutPor
 	}
 
 	// address: 10.0.0.4
-	err, _, _ = NewSingleEphemeralInstanceMongoWithNetworkConfigurationAndWithoutPort(
+	_, _, err = NewSingleEphemeralInstanceMongoWithNetworkConfigurationAndWithoutPort(
 		"container_c_delete_before_test",
 		iotmakerdocker.KRestartPolicyOnFailure,
 		networkAutoConfiguration,
@@ -81,7 +81,7 @@ func ExampleNewSingleEphemeralInstanceMongoWithNetworkConfigurationAndWithoutPor
 	}
 
 	// address: 10.0.0.5:8080
-	err, _, _, _ = factory_container_from_remote_server.NewContainerFromRemoteServerWithNetworkConfiguration(
+	_, _, _, err = factory_container_from_remote_server.NewContainerFromRemoteServerWithNetworkConfiguration(
 		"image_server_delete_before_test:latest",
 		"cont_server_delete_before_test",
 		iotmakerdocker.KRestartPolicyUnlessStopped,

@@ -43,7 +43,7 @@ func ExampleNewSingleEphemeralInstanceMongoLatestWithPort() {
 		panic(err)
 	}
 
-	err, _ = NewSingleEphemeralInstanceMongoLatestWithPort(
+	_, err = NewSingleEphemeralInstanceMongoLatestWithPort(
 		"container_a_delete_before_test",
 		newPort,
 		pullStatusChannel,
@@ -57,7 +57,7 @@ func ExampleNewSingleEphemeralInstanceMongoLatestWithPort() {
 		panic(err)
 	}
 
-	err, _ = NewSingleEphemeralInstanceMongoLatestWithPort(
+	_, err = NewSingleEphemeralInstanceMongoLatestWithPort(
 		"container_b_delete_before_test",
 		newPort,
 		pullStatusChannel,
@@ -71,7 +71,7 @@ func ExampleNewSingleEphemeralInstanceMongoLatestWithPort() {
 		panic(err)
 	}
 
-	err, _ = NewSingleEphemeralInstanceMongoLatestWithPort(
+	_, err = NewSingleEphemeralInstanceMongoLatestWithPort(
 		"container_c_delete_before_test",
 		newPort,
 		pullStatusChannel,

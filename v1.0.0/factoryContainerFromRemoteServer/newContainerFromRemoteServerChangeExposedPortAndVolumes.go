@@ -19,7 +19,11 @@ func NewContainerFromRemoteServerChangeExposedPortAndVolumes(
 	portList nat.PortMap,
 	containersVolumes []mount.Mount,
 	buildStatus *chan iotmakerdocker.ContainerPullStatusSendToChannel,
-) (err error, imageId, containerId string) {
+) (
+	imageId,
+	containerId string,
+	err error,
+) {
 
 	// init docker
 	var dockerSys = iotmakerdocker.DockerSystem{}

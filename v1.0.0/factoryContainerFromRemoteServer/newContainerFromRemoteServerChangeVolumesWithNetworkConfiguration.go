@@ -41,7 +41,7 @@ func NewContainerFromRemoteServerChangeVolumesWithNetworkConfiguration(
 		return
 	}
 
-	err, networkConfig = networkAutoConfiguration.GetNext()
+	networkConfig, err = networkAutoConfiguration.GetNext()
 	if err != nil {
 		return
 	}

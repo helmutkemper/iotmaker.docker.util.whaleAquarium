@@ -36,7 +36,7 @@ func ExampleNewSingleEphemeralInstanceMongoLatest() {
 		panic(err)
 	}
 
-	err, _ = NewSingleEphemeralInstanceMongoLatest(
+	_, err = NewSingleEphemeralInstanceMongoLatest(
 		"container_delete_before_test",
 		pullStatusChannel,
 	)

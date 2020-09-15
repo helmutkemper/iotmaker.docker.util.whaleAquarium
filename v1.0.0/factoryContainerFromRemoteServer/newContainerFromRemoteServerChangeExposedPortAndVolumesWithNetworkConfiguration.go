@@ -23,7 +23,12 @@ func NewContainerFromRemoteServerChangeExposedPortAndVolumesWithNetworkConfigura
 	portList nat.PortMap,
 	containersVolumes []mount.Mount,
 	buildStatus *chan iotmakerdocker.ContainerPullStatusSendToChannel,
-) (err error, imageId, containerId, networkId string) {
+) (
+	imageId string,
+	containerId,
+	networkId string,
+	err error,
+) {
 
 	var networkConfig *network.NetworkingConfig
 
@@ -40,7 +45,7 @@ func NewContainerFromRemoteServerChangeExposedPortAndVolumesWithNetworkConfigura
 		return
 	}
 
-	err, networkConfig = networkAutoConfiguration.GetNext()
+	networkConfig, err = networkAutoConfiguration.GetNext()
 	if err != nil {
 		return
 	}

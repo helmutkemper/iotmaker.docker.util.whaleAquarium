@@ -15,10 +15,14 @@ func NewSingleEphemeralInstanceMongoWithNetworkConfigurationAndWithoutPort(
 	networkAutoConfiguration *iotmakerdocker.NextNetworkAutoConfiguration,
 	version MongoDBVersionTag,
 	pullStatus *chan iotmakerdocker.ContainerPullStatusSendToChannel,
-) (err error, containerId, networkId string) {
+) (
+	containerId,
+	networkId string,
+	err error,
+) {
 
 	var imageName = "mongo:" + version.String()
-	err, containerId, networkId = newMongoEphemeralWithNetworkConfigurationAndWithoutPort(
+	containerId, networkId, err = newMongoEphemeralWithNetworkConfigurationAndWithoutPort(
 		imageName,
 		containerName,
 		newContainerRestartPolicy,

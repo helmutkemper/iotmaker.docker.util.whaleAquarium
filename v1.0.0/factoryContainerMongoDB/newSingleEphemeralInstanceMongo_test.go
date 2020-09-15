@@ -36,7 +36,7 @@ func ExampleNewSingleEphemeralInstanceMongo() {
 		panic(err)
 	}
 
-	err, _ = NewSingleEphemeralInstanceMongo(
+	_, err = NewSingleEphemeralInstanceMongo(
 		"container_delete_before_test",
 		KMongoDBVersionTag_latest,
 		pullStatusChannel,

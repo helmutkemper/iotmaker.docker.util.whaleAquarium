@@ -38,7 +38,7 @@ func ExampleNewContainerFromRemoteServerWithNetworkConfiguration() {
 		panic(err)
 	}
 
-	err, _, _, _ = NewContainerFromRemoteServerWithNetworkConfiguration(
+	_, _, _, err = NewContainerFromRemoteServerWithNetworkConfiguration(
 		"server_delete_before_test:latest",
 		"container_delete_before_test",
 		iotmakerdocker.KRestartPolicyOnFailure,

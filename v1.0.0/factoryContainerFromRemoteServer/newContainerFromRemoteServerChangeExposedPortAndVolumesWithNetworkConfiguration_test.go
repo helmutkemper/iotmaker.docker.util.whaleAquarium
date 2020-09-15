@@ -64,7 +64,7 @@ func ExampleNewContainerFromRemoteServerChangeExposedPortAndVolumesWithNetworkCo
 		panic(err)
 	}
 
-	err, _, _, _ = NewContainerFromRemoteServerChangeExposedPortAndVolumesWithNetworkConfiguration(
+	_, _, _, err = NewContainerFromRemoteServerChangeExposedPortAndVolumesWithNetworkConfiguration(
 		"server_delete_before_test:latest",
 		"container_delete_before_test",
 		iotmakerdocker.KRestartPolicyOnFailure,

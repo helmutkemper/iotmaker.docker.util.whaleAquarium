@@ -17,7 +17,10 @@ func newMongoEphemeral(
 	containerName string,
 	newPort nat.Port,
 	pullStatus *chan iotmakerdocker.ContainerPullStatusSendToChannel,
-) (err error, containerId string) {
+) (
+	containerId string,
+	err error,
+) {
 
 	var file []byte
 	var mountList []mount.Mount

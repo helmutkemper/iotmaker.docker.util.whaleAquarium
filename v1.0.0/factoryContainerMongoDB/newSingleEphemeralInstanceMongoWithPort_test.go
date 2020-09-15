@@ -43,7 +43,7 @@ func ExampleNewSingleEphemeralInstanceMongoWithPort() {
 		panic(err)
 	}
 
-	err, _ = NewSingleEphemeralInstanceMongoWithPort(
+	_, err = NewSingleEphemeralInstanceMongoWithPort(
 		"container_a_delete_before_test",
 		newPort,
 		KMongoDBVersionTag_3,
@@ -58,7 +58,7 @@ func ExampleNewSingleEphemeralInstanceMongoWithPort() {
 		panic(err)
 	}
 
-	err, _ = NewSingleEphemeralInstanceMongoWithPort(
+	_, err = NewSingleEphemeralInstanceMongoWithPort(
 		"container_b_delete_before_test",
 		newPort,
 		KMongoDBVersionTag_3,
@@ -73,7 +73,7 @@ func ExampleNewSingleEphemeralInstanceMongoWithPort() {
 		panic(err)
 	}
 
-	err, _ = NewSingleEphemeralInstanceMongoWithPort(
+	_, err = NewSingleEphemeralInstanceMongoWithPort(
 		"container_c_delete_before_test",
 		newPort,
 		KMongoDBVersionTag_3,

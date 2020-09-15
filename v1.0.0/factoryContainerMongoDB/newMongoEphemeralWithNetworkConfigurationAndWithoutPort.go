@@ -18,7 +18,11 @@ func newMongoEphemeralWithNetworkConfigurationAndWithoutPort(
 	containerRestartPolicy iotmakerdocker.RestartPolicy,
 	networkAutoConfiguration *iotmakerdocker.NextNetworkAutoConfiguration,
 	pullStatus *chan iotmakerdocker.ContainerPullStatusSendToChannel,
-) (err error, containerId, networkId string) {
+) (
+	containerId string,
+	networkId string,
+	err error,
+) {
 
 	var file []byte
 	var mountList []mount.Mount
@@ -46,7 +50,7 @@ func newMongoEphemeralWithNetworkConfigurationAndWithoutPort(
 		return
 	}
 
-	err, networkConfig = networkAutoConfiguration.GetNext()
+	networkConfig, err = networkAutoConfiguration.GetNext()
 	if err != nil {
 		return
 	}

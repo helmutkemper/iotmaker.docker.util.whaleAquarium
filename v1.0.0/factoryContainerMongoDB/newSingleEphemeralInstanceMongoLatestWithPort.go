@@ -14,10 +14,13 @@ func NewSingleEphemeralInstanceMongoLatestWithPort(
 	containerName string,
 	port nat.Port,
 	pullStatus *chan iotmakerdocker.ContainerPullStatusSendToChannel,
-) (err error, containerId string) {
+) (
+	containerId string,
+	err error,
+) {
 
 	var imageName = "mongo:latest"
-	err, containerId = newMongoEphemeral(imageName, containerName, port, pullStatus)
+	containerId, err = newMongoEphemeral(imageName, containerName, port, pullStatus)
 
 	return
 }

@@ -60,7 +60,7 @@ func ExampleNewContainerFromRemoteServerChangeExposedPortAndVolumes() {
 		panic(err)
 	}
 
-	err, _, _ = NewContainerFromRemoteServerChangeExposedPortAndVolumes(
+	_, _, err = NewContainerFromRemoteServerChangeExposedPortAndVolumes(
 		"server_delete_before_test:latest",
 		"container_delete_before_test",
 		"https://github.com/helmutkemper/iotmaker.docker.util.whaleAquarium.sample.git",

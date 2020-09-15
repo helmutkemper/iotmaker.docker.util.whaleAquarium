@@ -1,4 +1,4 @@
-package factoryContainerFromRemoteServer
+package factory_container_from_remote_server
 
 import (
 	"fmt"
@@ -29,7 +29,7 @@ func ExampleNewContainerCreateExposePortsAutomaticallyAndStart() {
 
 	}(*pullStatusChannel)
 
-	err = toolsGarbageCollector.RemoveAllByNameContains("delete")
+	err = tools_garbage_collector.RemoveAllByNameContains("delete")
 	if err != nil {
 		panic(err)
 	}
@@ -62,7 +62,7 @@ func ExampleNewContainerCreateExposePortsAutomaticallyAndStart() {
 		panic(err)
 	}
 
-	err = toolsGarbageCollector.RemoveAllByNameContains("delete")
+	err = tools_garbage_collector.RemoveAllByNameContains("delete")
 	if err != nil {
 		panic(err)
 	}

@@ -1,10 +1,10 @@
-package factoryContainerMongoDB
+package factory_container_mongodb
 
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/helmutkemper/iotmaker.docker.util.whaleAquarium/v1.0.0/factoryContainerFromRemoteServer"
-	"github.com/helmutkemper/iotmaker.docker.util.whaleAquarium/v1.0.0/toolsGarbageCollector"
+	factory_container_from_remote_server "github.com/helmutkemper/iotmaker.docker.util.whaleAquarium/v1.0.0/factoryContainerFromRemoteServer"
+	tools_garbage_collector "github.com/helmutkemper/iotmaker.docker.util.whaleAquarium/v1.0.0/toolsGarbageCollector"
 	iotmakerdocker "github.com/helmutkemper/iotmaker.docker/v1.0.0"
 	"io/ioutil"
 	"log"
@@ -32,7 +32,7 @@ func ExampleNewSingleEphemeralInstanceMongoWithNetworkConfigurationAndWithoutPor
 	}(*pullStatusChannel)
 
 	// stop and remove containers and garbage collector
-	err = toolsGarbageCollector.RemoveAllByNameContains("delete")
+	err = tools_garbage_collector.RemoveAllByNameContains("delete")
 	if err != nil {
 		panic(err)
 	}
@@ -81,7 +81,7 @@ func ExampleNewSingleEphemeralInstanceMongoWithNetworkConfigurationAndWithoutPor
 	}
 
 	// address: 10.0.0.5:8080
-	err, _, _, _ = factoryContainerFromRemoteServer.NewContainerFromRemoteServerWithNetworkConfiguration(
+	err, _, _, _ = factory_container_from_remote_server.NewContainerFromRemoteServerWithNetworkConfiguration(
 		"image_server_delete_before_test:latest",
 		"cont_server_delete_before_test",
 		iotmakerdocker.KRestartPolicyUnlessStopped,
@@ -99,7 +99,7 @@ func ExampleNewSingleEphemeralInstanceMongoWithNetworkConfigurationAndWithoutPor
 	verifyServer("http://127.0.0.1:8080/?db=10.0.0.4:27017")
 
 	// stop and remove containers and garbage collector
-	err = toolsGarbageCollector.RemoveAllByNameContains("delete")
+	err = tools_garbage_collector.RemoveAllByNameContains("delete")
 	if err != nil {
 		panic(err)
 	}

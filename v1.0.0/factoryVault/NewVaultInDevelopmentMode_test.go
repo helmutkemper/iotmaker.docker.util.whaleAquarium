@@ -1,10 +1,10 @@
-package factoryVault
+package factory_vault
 
 import (
 	"errors"
 	"fmt"
 	"github.com/hashicorp/vault/api"
-	"github.com/helmutkemper/iotmaker.docker.util.whaleAquarium/v1.0.0/toolsGarbageCollector"
+	tools_garbage_collector "github.com/helmutkemper/iotmaker.docker.util.whaleAquarium/v1.0.0/toolsGarbageCollector"
 	iotmakerdocker "github.com/helmutkemper/iotmaker.docker/v1.0.0"
 	"net/http"
 	"time"
@@ -38,7 +38,7 @@ func ExampleNewVaultInDevelopmentMode() {
 
 	}(*pullStatusChannel)
 
-	err = toolsGarbageCollector.RemoveAllByNameContains("vaultContainer")
+	err = tools_garbage_collector.RemoveAllByNameContains("vaultContainer")
 	if err != nil {
 		panic(err)
 	}
@@ -103,7 +103,7 @@ func ExampleNewVaultInDevelopmentMode() {
 		panic(err)
 	}
 
-	err = toolsGarbageCollector.RemoveAllByNameContains("vaultContainer")
+	err = tools_garbage_collector.RemoveAllByNameContains("vaultContainer")
 	if err != nil {
 		panic(err)
 	}

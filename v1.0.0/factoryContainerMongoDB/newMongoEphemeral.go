@@ -1,4 +1,4 @@
-package factoryContainerMongoDB
+package factory_container_mongodb
 
 import (
 	"github.com/docker/docker/api/types/mount"

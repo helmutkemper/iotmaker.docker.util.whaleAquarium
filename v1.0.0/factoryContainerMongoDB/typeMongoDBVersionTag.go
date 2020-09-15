@@ -1,4 +1,4 @@
-package factoryContainerMongoDB
+package factory_container_mongodb
 
 type MongoDBVersionTag int
 

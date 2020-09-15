@@ -1,4 +1,4 @@
-package factoryVault
+package factory_vault
 
 type VaultVersionTag int
 

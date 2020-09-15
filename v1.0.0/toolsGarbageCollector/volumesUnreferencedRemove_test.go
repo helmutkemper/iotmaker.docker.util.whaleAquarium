@@ -1,4 +1,4 @@
-package toolsGarbageCollector
+package tools_garbage_collector
 
 import (
 	"fmt"

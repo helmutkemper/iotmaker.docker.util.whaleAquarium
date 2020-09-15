@@ -1,4 +1,4 @@
-package toolsGarbageCollector
+package tools_garbage_collector
 
 import iotmakerdocker "github.com/helmutkemper/iotmaker.docker/v1.0.0"
 

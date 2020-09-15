@@ -1,4 +1,4 @@
-package factoryContainerFromRemoteServer
+package factory_container_from_remote_server
 
 import (
 	"github.com/docker/docker/api/types/mount"

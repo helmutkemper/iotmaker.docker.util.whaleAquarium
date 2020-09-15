@@ -1,10 +1,10 @@
-package factoryContainerMongoDB
+package factory_container_mongodb
 
 import (
 	"context"
 	"fmt"
 	"github.com/docker/go-connections/nat"
-	"github.com/helmutkemper/iotmaker.docker.util.whaleAquarium/v1.0.0/toolsGarbageCollector"
+	tools_garbage_collector "github.com/helmutkemper/iotmaker.docker.util.whaleAquarium/v1.0.0/toolsGarbageCollector"
 	iotmakerdocker "github.com/helmutkemper/iotmaker.docker/v1.0.0"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
@@ -33,7 +33,7 @@ func ExampleNewSingleEphemeralInstanceMongoWithPort() {
 	}(*pullStatusChannel)
 
 	// stop and remove containers and garbage collector
-	err = toolsGarbageCollector.RemoveAllByNameContains("delete")
+	err = tools_garbage_collector.RemoveAllByNameContains("delete")
 	if err != nil {
 		panic(err)
 	}
@@ -111,7 +111,7 @@ func ExampleNewSingleEphemeralInstanceMongoWithPort() {
 
 	fmt.Println("ping ok")
 
-	err = toolsGarbageCollector.RemoveAllByNameContains("delete")
+	err = tools_garbage_collector.RemoveAllByNameContains("delete")
 	if err != nil {
 		panic(err)
 	}

@@ -1,5 +1,8 @@
 package factorycontainermongodb
 
+// MongoDBVersionTag (English): MongoDB version. Example: KMongoDBVersionTag_latest
+//
+// MongoDBVersionTag (Português): versão do MongoDB. Exemplo: KMongoDBVersionTag_latest
 type MongoDBVersionTag int
 
 const (

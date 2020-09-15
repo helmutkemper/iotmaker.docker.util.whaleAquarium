@@ -1,5 +1,8 @@
 package factoryvault
 
+// VaultVersionTag (English): Vault version. Example: KVaultVersionTag_latest
+//
+// VaultVersionTag (Português): versão do Vault. Exemplo: KVaultVersionTag_latest
 type VaultVersionTag int
 
 const (

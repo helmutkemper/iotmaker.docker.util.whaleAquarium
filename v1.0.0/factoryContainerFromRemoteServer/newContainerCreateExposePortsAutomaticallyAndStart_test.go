@@ -1,8 +1,8 @@
-package factory_container_from_remote_server
+package factorycontainerfromremoteserver
 
 import (
 	"fmt"
-	"github.com/helmutkemper/iotmaker.docker.util.whaleAquarium/v1.0.0/toolsGarbageCollector"
+	toolsgarbagecollector "github.com/helmutkemper/iotmaker.docker.util.whaleAquarium/v1.0.0/toolsGarbageCollector"
 	iotmakerdocker "github.com/helmutkemper/iotmaker.docker/v1.0.0"
 	"io/ioutil"
 	"net/http"
@@ -29,7 +29,7 @@ func ExampleNewContainerCreateExposePortsAutomaticallyAndStart() {
 
 	}(*pullStatusChannel)
 
-	err = tools_garbage_collector.RemoveAllByNameContains("delete")
+	err = toolsgarbagecollector.RemoveAllByNameContains("delete")
 	if err != nil {
 		panic(err)
 	}
@@ -62,7 +62,7 @@ func ExampleNewContainerCreateExposePortsAutomaticallyAndStart() {
 		panic(err)
 	}
 
-	err = tools_garbage_collector.RemoveAllByNameContains("delete")
+	err = toolsgarbagecollector.RemoveAllByNameContains("delete")
 	if err != nil {
 		panic(err)
 	}

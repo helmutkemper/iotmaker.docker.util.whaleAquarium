@@ -1,4 +1,4 @@
-package factory_vault
+package factoryvault
 
 import (
 	"errors"

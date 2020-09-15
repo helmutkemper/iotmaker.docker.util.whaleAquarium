@@ -1,4 +1,4 @@
-package factory_container_mongodb
+package factorycontainermongodb
 
 import iotmakerdocker "github.com/helmutkemper/iotmaker.docker/v1.0.0"
 

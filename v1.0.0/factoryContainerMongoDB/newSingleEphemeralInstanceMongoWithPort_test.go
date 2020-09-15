@@ -1,4 +1,4 @@
-package factory_container_mongodb
+package factorycontainermongodb
 
 import (
 	"context"

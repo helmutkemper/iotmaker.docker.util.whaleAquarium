@@ -1,4 +1,4 @@
-package factory_container_from_remote_server
+package factorycontainerfromremoteserver
 
 import (
 	"fmt"

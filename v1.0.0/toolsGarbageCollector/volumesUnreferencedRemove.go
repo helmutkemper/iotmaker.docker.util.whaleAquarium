@@ -1,4 +1,4 @@
-package tools_garbage_collector
+package toolsgarbagecollector
 
 import (
 	"github.com/docker/docker/api/types"

@@ -3,7 +3,7 @@ package util
 import (
 	"errors"
 	"github.com/docker/docker/api/types"
-	iotmakerdocker "github.com/helmutkemper/iotmaker.docker/v1.0.0.0-RC"
+	iotmakerdocker "github.com/helmutkemper/iotmaker.docker/v1.0.0"
 )
 
 func NetworkFindTypeHost() (
